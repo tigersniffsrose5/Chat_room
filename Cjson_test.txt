@@ -1,0 +1,191 @@
+ cJSON的核心结构体就是一个cJSON，理解了这个结构体，基本上对cJSON的使用就有了个基本概念了。该结构体具体定义如下：
+
+typedef struct cJSON {
+
+       struct cJSON*next,*prev;           /* 遍历数组或对象链的前向或后向链表指针*/
+
+       struct cJSON *child;                   /*数组或对象的孩子节点*/
+
+       int type;                                     /* key的类型*/
+
+       char *valuestring;                       /*字符串值*/
+
+       int valueint;                                /* 整数值*/
+
+       double valuedouble;                    /* 浮点数值*/
+
+       char *string;                               /* key的名字*/
+
+} cJSON;
+
+说明：
+
+1、cJSON是使用链表来存储数据的，其访问方式很像一颗树。每一个节点可以有兄弟节点，通过next/prev指针来查找，它类似双向链表；每个节点也可以有孩子节点，通过child指针来访问，进入下一层。只有节点是对象或数组时才可以有孩子节点。
+
+2、type是键（key）的类型，一共有7种取值，分别是：False，Ture，NULL，Number，String，Array，Object。
+
+若是Number类型，则valueint或valuedouble中存储着值。若期望的是int，则访问valueint，若期望的是double，则访问valuedouble，可以得到值。
+
+若是String类型的，则valuestring中存储着值，可以访问valuestring得到值。
+
+3、string中存放的是这个节点的名字，可理解为key的名称。
+
+
+3，解析一个键值对；  
+         首先是一个简单的键值对字符串，要解析的目标如下：
+
+{"firstName":"Brett"}
+
+要进行解析，也就是要分别获取到键与值的内容。我们很容易就能看出键为firstName，值为Brett，可是，使用cJSON怎么解析呢？ 
+
+         对于这个简单的例子，只需要调用cJSON的三个接口函数就可以实现解析了，这三个函数的原型如下：
+
+cJSON*cJSON_Parse(const char *value);
+
+cJSON*cJSON_GetObjectItem(cJSON *object,const char *string);
+
+voidcJSON_Delete(cJSON *c); 
+
+下面按解析过程来描述一次：
+
+（1）       首先调用cJSON_Parse()函数，解析JSON数据包，并按照cJSON结构体的结构序列化整个数据包。使用该函数会通过malloc()函数在内存中开辟一个空间，使用完成需要手动释放。
+
+cJSON*root=cJSON_Parse(json_string); 
+
+（2）       调用cJSON_GetObjectItem()函数，可从cJSON结构体中查找某个子节点名称（键名称），如果查找成功可把该子节点序列化到cJSON结构体中。
+
+cJSON*item=cJSON_GetObjectItem(root,"firstName"); 
+
+（3）       如果需要使用cJSON结构体中的内容，可通过cJSON结构体中的valueint和valuestring取出有价值的内容（即键的值）
+
+本例子中，我们直接访问 item->valuestring 就获取到 "Brett" 的内容了。
+
+（4）       通过cJSON_Delete()，释放cJSON_Parse()分配出来的内存空间。
+
+cJSON_Delete(root);
+
+         这样就完成了一次cJSON接口调用，实现了解析工作。使用起来其实也很简单的啊，呵呵。
+
+4，解析一个结构体；        
+         接下来，我们来个复杂一点的，解析一个结构体，要解析的目标如下：
+
+{
+
+         "person":
+
+         {
+
+                   "firstName":"z",
+
+                   "lastName":"jadena",
+
+                   "email":"jadena@126.com",
+
+                   "age":8,
+
+                   "height":1.17
+
+         }       
+
+}
+
+看起来比一个键值对复杂多了，我们又需要学习新的接口函数了吗？
+
+         答案是不需要！
+
+         还是那三个函数就可以了。当然，解析的步骤要复杂一些了，下面我按解析过程来描述一次： 
+
+（1）根据JSON串中的对象，我们定义一个相应的结构体如下：
+
+typedefstruct
+
+{
+
+         char firstName[32];
+
+         char lastName[32];
+
+         char email[64];
+
+         int age;
+
+         float height;
+
+} PERSON;
+
+具体的对应关系，一目了然，我就不罗嗦了。让我们直奔主题，解析！     
+
+（2）还是调用cJSON_Parse()函数，解析JSON数据包。
+
+cJSON*root=cJSON_Parse(json_string); 
+
+（3）调用一次cJSON_GetObjectItem()函数，获取到对象person。
+
+cJSON *object=cJSON_GetObjectItem(root,"person"); 
+
+（4）对我们刚取出来的对象person，多次调用cJSON_GetObjectItem()函数，来获取对象的成员。此时要注意，不同的成员，访问的方法不一样：
+
+cJSON*item;
+
+PERSONperson;
+
+item=cJSON_GetObjectItem(object,"firstName");
+
+memcpy(person.firstName,item->valuestring,strlen(item->valuestring));
+
+item=cJSON_GetObjectItem(object,"lastName");
+
+memcpy(person.lastName,item->valuestring,strlen(item->valuestring));
+
+item=cJSON_GetObjectItem(object,"email");
+
+memcpy(person.email,item->valuestring,strlen(item->valuestring));
+
+item=cJSON_GetObjectItem(object,"age");
+
+person.age=item->valueint;
+
+item=cJSON_GetObjectItem(object,"height");
+
+person.height=item->valuedouble;
+
+这样，就获取到了对象的全部内容了。
+
+（5）       通过cJSON_Delete()，释放cJSON_Parse()分配出来的内存空间。
+
+cJSON_Delete(root);
+
+         至此，我们就使用cJSON接口完成了基于结构体的解析工作。 
+
+5，解析结构体数组的JSON串；          
+         最后，我们来个更复杂一些的，来解析一个数组，并且数组的成员是结构体！要解析的JSON串如下：
+
+{
+
+"people":[
+
+{"firstName":"z","lastName":"Jason","email":"bbbb@126.com","height":1.67},
+
+{"lastName":"jadena","email":"jadena@126.com","age":8,"height":1.17},
+
+{"email":"cccc@126.com","firstName":"z","lastName":"Juliet","age":36,"height":1.55}
+
+]
+
+} 
+
+         此时，我们真的又需要学习新的接口了，一个是获取数组长度，一个是取数组成员，函数原型如下：
+
+int    cJSON_GetArraySize(cJSON *array);
+
+cJSON*cJSON_GetArrayItem(cJSON *array,int item); 
+
+         由于前面已经实现了结构体的解析，这里我们只需要关注下数组的相关调用即可。 
+
+（1）调用cJSON_Parse()函数，解析JSON数据包。
+
+（2）调用一次cJSON_GetObjectItem()函数，获取到数组people。
+
+（3）对我们刚取出来的数组people，调用cJSON_GetArraySize()函数，来获取数组中对象的个数。然后，多次调用cJSON_GetArrayItem()函数，逐个读取数组中对象的内容。
+
+（4）通过cJSON_Delete()，释放cJSON_Parse()分配出来的内存空间。
