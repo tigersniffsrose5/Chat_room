@@ -44,7 +44,6 @@ int main()
     clear();              
     refresh();            
     curs_set(0);                                            //隐藏光标，0隐藏 1正常 2高亮显示
-    Wind(stdscr, UpRow, LeftCol, DownRow, RightCol);        //主界面边框
     DrawMain();                                             //在屏幕上画出主菜单
     SelectMenu();                                           //对用户的操作进行相应的处理
 
@@ -75,6 +74,8 @@ void DrawMain(void)           //画主菜单
     strcpy(strArr[2], "*                    ChatRoom                    *");
     strcpy(strArr[3], "**************************************************");
     
+    Wind(stdscr, UpRow, LeftCol, DownRow, RightCol);        //主界面边框
+
     mvaddstr(3, 15+LeftCol, strArr[0]);
     mvaddstr(4, 15+LeftCol, strArr[1]);
     mvaddstr(5, 15+LeftCol, strArr[2]);
@@ -86,7 +87,7 @@ void DrawMain(void)           //画主菜单
     }
 
     attron(A_REVERSE);  
-    mvaddstr(10, SubCol[ActMm]+LeftCol, MainMenu[ActMm]);     //将主菜单以反显的方式显示
+    mvaddstr(10+ActMm*4, SubCol[ActMm]+LeftCol, MainMenu[ActMm]);     //将主菜单以反显的方式显示
     attroff(A_REVERSE);
 
 }
