@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
+#include <locale.h>
 #include <string.h>
 
 #define ESC 27
@@ -8,10 +9,10 @@
 #define TAB '\t'
 #define Backspace 8
 #define SPACE 32
-#define UpRow 0
-#define DownRow 23
-#define LeftCol 0
-#define RightCol 79
+#define UpRow 0         //行起始
+#define DownRow 30      //行末尾
+#define LeftCol 28       //列起始
+#define RightCol 108     //列末尾
 #define MAINI 5
 #define SBI1 2
 #define SBI2 3
@@ -20,208 +21,114 @@
 #define SBI5 3
 
 void Initial(void);
-void BkScreen(void);
 void DrawMain(void);
-void DrawSub(void);
-void SelectMenu(void);
+void SelectMenu(void);             
 void SelectMainMenu(void);
-void SelectMSubMenu(void);
 void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
-void Process(int, char *);
+void Process();
 
-int ActMm = 0;
-int key = 0;
-int bSubOpen = 0;
-char *MainMenu[MAINI] = { "file", "Menu 1", "Menu 2", "Menu 3", "Menu 4" };
-int SubNum[MAINI] = { SBI1, SBI2, SBI3, SBI4, SBI5 };
-int SubWid[MAINI] = { 6, 10, 10, 10, 10 };
-int SubCol[MAINI] = { 4, 16, 28, 40, 52 };
-int ActSm[MAINI] = { 0, 0, 0, 0, 0 };
-char *SubMenu[MAINI][10] {
-    { "About", "Exit" },
-    { "Menu 1-1", "Menu 1-2", "Menu 1-3" },
-    { "Menu 2-1", "Menu 2-2", "Menu 2-3" },
-    { "Menu 3-1", "Menu 3-2", "Menu 3-3" },
-    { "Menu 4-1", "Menu 4-2", "Menu 4-3" },
-};
+int ActMm = 0;          //代表当前主菜单激活的号码
+int key = 0;            //用户从键盘输如的选择
+int bSubOpen = 0;       //当前焦点位置
+char *MainMenu[MAINI] = { "********退出********", "********登录********", "********注册********",
+    "******找回密码******", "********更多********" };     //主菜单
+int SubCol[MAINI] = { 30, 30, 30, 30, 30 };
+
 
 int main()
 {
-    Initial();
-    clear();
-    refresh();
-    BkScreen();
-    DrawMain();
-    SelectMenu();
+
+    setlocale(LC_ALL,"");
+    Initial();                                              //初始化函数      
+    clear();              
+    refresh();            
+    curs_set(0);                                            //隐藏光标，0隐藏 1正常 2高亮显示
+    Wind(stdscr, UpRow, LeftCol, DownRow, RightCol);        //主界面边框
+    DrawMain();                                             //在屏幕上画出主菜单
+    SelectMenu();                                           //对用户的操作进行相应的处理
+
 }
 
 void Initial(void)
 {
-    initscr();
-    cbreak();
-    nonl();
-    noecho();
-    keypad(stdscr, TRUE);
-    refresh();
-}
-
-void BkScreen(void)
-{
-    char strArr[23][200];
     
-    strcpy(strArr[0], "                                                                                                                        ");
-    strcpy(strArr[1], "                                                                                                                        ");
-    strcpy(strArr[2], "           @@@@@@@@@  @            @@@@@@@@   @@@@@@@@                    @@                                            ");
-    strcpy(strArr[3], "          @@@@@@@@@@@@@            @@@@@@@    @@@@@@@@                   @@@                    @@@@@@@@@@@@@@@@@       ");
-    strcpy(strArr[4], "        @@@@@@    @@@@@              @@@@       @@@@                     @@@                    @@@@@@@@@@@@@@@@@       ");
-    strcpy(strArr[5], "       @@@@@@       @@@              @@@         @@@                    @@@@@                   @@@    @@@    @@@       ");
-    strcpy(strArr[6], "       @@@@@         @@              @@@         @@@                    @@@@@                   @@     @@@     @@       ");
-    strcpy(strArr[7], "      @@@@@          @@              @@@         @@@                   @@@@@@@                  @@     @@@      @       ");
-    strcpy(strArr[8], "      @@@@@           @              @@@         @@@                   @@@@@@@                         @@@              ");
-    strcpy(strArr[9], "      @@@@                           @@@         @@@                  @@@@@@@@@                        @@@              ");
-    strcpy(strArr[10], "     @@@@@                           @@@         @@@                  @@@  @@@@                        @@@              ");
-    strcpy(strArr[11], "     @@@@@                           @@@@@@@@@@@@@@@                  @@@  @@@@@                       @@@              ");
-    strcpy(strArr[12], "     @@@@@                           @@@@@@@@@@@@@@@                 @@@    @@@@                       @@@              ");
-    strcpy(strArr[13], "     @@@@@                           @@@         @@@                 @@@@@@@@@@@                       @@@              ");
-    strcpy(strArr[14], "      @@@@                           @@@         @@@                @@@@@@@@@@@@@                      @@@              ");
-    strcpy(strArr[15], "      @@@@@                          @@@         @@@                @@@      @@@@                      @@@              ");
-    strcpy(strArr[16], "      @@@@@@          @              @@@         @@@               @@@@      @@@@@                     @@@              ");
-    strcpy(strArr[17], "        @@@@@@      @@@              @@@@       @@@@              @@@@        @@@@@                    @@@              ");
-    strcpy(strArr[18], "         @@@@@@@@@@@@@             @@@@@@@     @@@@@@@           @@@@@        @@@@@@                  @@@@@             ");
-    strcpy(strArr[19], "          @@@@@@@@@@@              @@@@@@@@   @@@@@@@@           @@@@@       @@@@@@@@               @@@@@@@@@           ");
-    strcpy(strArr[20], "             @@@@@                                                                                  @@@@@@@@@           ");
-    strcpy(strArr[21], "                                                                                                                        ");
-    strcpy(strArr[22], "                                                                                                                        ");
+    initscr();                //初始化终端，启动curses模式
+    cbreak();                 //将系统输入的字符立刻读取 
+    nonl();                   //使enter键不被识别为'\n'
+    noecho();                 //关闭回显开关，使用户输入的不会被显示在屏幕上                         
+    keypad(stdscr, TRUE);     //处理方向键
+    refresh();                //刷新
 
-    Wind(stdscr, UpRow, LeftCol, DownRow, RightCol);
-
-    for ( int i = 0; i < 23; i++ ) {
-        mvwaddstr(stdscr, 8+i, 12, strArr[i]);
-    }
 }
 
-void DrawMain(void)
+
+
+void DrawMain(void)           //画主菜单                  
 {
+ 
     int i;
+    char strArr[4][51];
+
+    strcpy(strArr[0], "**************************************************");
+    strcpy(strArr[1], "*                   Welcome to                   *");
+    strcpy(strArr[2], "*                    ChatRoom                    *");
+    strcpy(strArr[3], "**************************************************");
+    
+    mvaddstr(3, 15+LeftCol, strArr[0]);
+    mvaddstr(4, 15+LeftCol, strArr[1]);
+    mvaddstr(5, 15+LeftCol, strArr[2]);
+    mvaddstr(6, 15+LeftCol, strArr[3]);
+
 
     for ( i = 0; i < MAINI; i++ ) {
-        mvaddstr(UpRow+1, SubCol[i], MainMenu[i]);
+        mvaddstr(10+i*4, SubCol[i]+LeftCol, MainMenu[i]);     //打印主菜单
     }
 
-    attron(A_REVERSE);
-    mvaddstr(UpRow+1, SubCol[ActMm], MainMenu[ActMm]);
+    attron(A_REVERSE);  
+    mvaddstr(10, SubCol[ActMm]+LeftCol, MainMenu[ActMm]);     //将主菜单以反显的方式显示
     attroff(A_REVERSE);
-    move(UpRow+1, SubCol[ActMm]);
 
 }
 
-void SelectMenu(void)
+void SelectMenu(void)         //处理用户按键，调用相应的功能函数    
 {
+    
     while (1) {
+
         key = getch();
 
-        if ( key == KEY_LEFT || key == KEY_RIGHT ) {
+        if ( key == KEY_UP || key == KEY_DOWN ) {
             SelectMainMenu();
         }
 
-        else if (( key == KEY_UP || key == KEY_DOWN ) && ( bSubOpen == 1 )) {
-            SelectMSubMenu();
-        }
-
         else if ( key == ENTER ) {
-            if ( bSubOpen == 1 ) {
-                switch ( ActMm ) { 
-                
-                case 0:
-                    switch ( ActSm[ActMm] ) {
-                    case 0:
-                        Process(0, " ");
-                        break;
-                    case 1:
-                        QuitProg();
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                
-                case 1:
-                    switch ( ActSm[ActMm] ) {
-                    case 0:
-                        Process(1, "Process Menu 1-1");
-                        break;
-                    case 1:
-                        Process(1, "Process Menu 1-2");
-                        break;
-                    case 2:
-                        Process(1, "Process Menu 1-3");
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                 
-                case 2:
-                    switch ( ActSm[ActMm] ) {
-                    case 0:
-                        Process(1, "Process Menu 2-1");
-                        break;
-                    case 1:
-                        Process(1, "Process Menu 2-2");
-                        break;
-                    case 2:
-                        Process(1, "Process Menu 2-3");
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                 
-                 case 3:
-                    switch ( ActSm[ActMm] ) {
-                    case 0:
-                        Process(1, "Process Menu 3-1");
-                        break;
-                    case 1:
-                        Process(1, "Process Menu 3-2");
-                        break;
-                    case 2:
-                        Process(1, "Process Menu 3-3");
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                 
-                 case 4:
-                    switch ( ActSm[ActMm] ) {
-                    case 0:
-                        Process(1, "Process Menu 4-1");
-                        break;
-                    case 1:
-                        Process(1, "Process Menu 4-2");
-                        break;
-                    case 2:
-                        Process(1, "Process Menu 4-3");
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                
-                 default:
-                    break;
-                }
-                
-                bSubOpen = 0;
-                BkScreen();
-                DrawMain();
-            }
+            
+            switch ( ActMm ) { 
 
-            else {
-                bSubOpen = 1;
-                DrawSub();
+            case 0:
+                QuitProg();
+                break;
+
+            case 1:
+                Process();
+                break;
+            
+            case 2:
+                Process();
+                break;
+            
+            case 3:
+                Process();
+                break;
+
+            case 4:
+                Process();
+                break;
+
+            default:
+                break;
+            
             }
         }
     }
@@ -229,84 +136,22 @@ void SelectMenu(void)
 
 void SelectMainMenu(void)
 {
-    if ( bSubOpen == 0 ) {
-        
-        mvaddstr(UpRow+1, SubCol[ActMm], MainMenu[ActMm]);
+    mvaddstr(10+ActMm*4, SubCol[ActMm]+LeftCol, MainMenu[ActMm]); 
 
-        if ( key == KEY_LEFT ) {
-            ActMm = ActMm == 0 ? MAINI-1 : ActMm-1;
-        } 
-
-        else {
-            ActMm = ActMm == MAINI-1 ? 0 : ActMm+1;
-        }
-
-        attron(A_REVERSE);
-        mvaddstr(UpRow+1, SubCol[ActMm], MainMenu[ActMm]);
-        attroff(A_REVERSE);
-        move(UpRow+1, SubCol[ActMm]);
-    }
-
-    else {
-
-        if ( key == KEY_LEFT ) {
-            ActMm = ActMm == 0 ? MAINI-1 : ActMm-1;
-        }
-
-        else {
-            ActMm = ActMm == MAINI-1 ? 0 : ActMm+1;
-        }
-
-        clear();
-        refresh();
-        BkScreen();
-        DrawMain();
-        DrawSub();
-    }
-}
-
-void SelectMSubMenu(void)
-{
-    attoff(A_REVERSE);
-    mvaddstr(UpRow+3+ActMm[ActMm], SubCol[ActMm]+2, SubMenu[ActMm][ActSm[ActMm]]);
-    
     if ( key == KEY_UP ) {
-        ActSm[ActMm] = ActSm[ActMm] == 0 ? SubNum[ActMm]-1 : ActSm[ActMm]-1;
+        ActMm = ActMm == 0 ? ActMm+4 : ActMm-1;
     } 
 
     else {
-        ActSm[ActMm] = ActSm[ActMm] == SubNum[ActMm]-1 ? 0 : ActSm[ActMm]+1;
+        ActMm = ActMm == 4 ? 0 : ActMm+1;
     }
 
     attron(A_REVERSE);
-    mvaddstr(UpRow+3+ActSm[ActMm], SubCol[ActMm]+2, SubMenu[ActMm][ActSm[ActMm]]);
+    mvaddstr(10+ActMm*4, SubCol[ActMm]+LeftCol, MainMenu[ActMm]);
     attroff(A_REVERSE);
-    move(UpRow+3+ActSm[ActMm], SubCol[ActMm]+2);
 }
-
-void DrawSub(void)
-{
-    int i;
-    Wind(stdscr, UpRow+2, SubCol[ActMm], UpRow+2+SubNum[ActMm]+1, SubCol[ActMm]+SubWid[ActMm]+1);
-    for ( i = 0; i < SubNum[ActMm]; i++ ) {
-       
-        if ( i == ActSm[ActMm] ) {
-            attron(A_REVERSE);
-            mvaddstr(UpRow+3+ActSm[ActMm], SubCol[ActMm]+2, SubMenu[ActMm[i]]);
-            attoff(A_REVERSE);
-        }
-
-        else {
-            mvaddstr(UpRow+3+i, SubCol[ActMm]+2, SubMenu[ActMm][i]);
-        }
-
-    }
-
-    move(UpRow+3+ActSm[ActMm], SubCol[ActMm]+2);
-
-}
-
-void QuitProg(void)
+ 
+void QuitProg(void)      //退出函数
 {
     clear();
     refresh();
@@ -314,7 +159,7 @@ void QuitProg(void)
     exit(0);
 }
 
-void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)
+void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)   //构造边框函数
 {
     int i;
     
@@ -330,9 +175,25 @@ void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)
 
 }
 
-void Process(int flag, chat *str)
+void Process(void)        //显示内容不同的对话框
 {
-    WINDOW *aboutWin;
+    WINDOW *aboutWin;                    //声明一个新的窗口
     clear();
+    touchwin(stdscr);                    //激活stdrc窗口
+    wrefresh(stdscr);                    
+    aboutWin = newwin(13, 40, 8, 48);
+    Wind(aboutWin, 0, 0, 12, 39);
 
+    mvwaddstr(aboutWin, 2, 10, "******敬请期待******");
+    mvwaddstr(aboutWin, 6, 10, "*******权诗佳*******");
+
+    wattron(aboutWin, A_REVERSE);
+    mvwaddstr(aboutWin, 9, 6, "Press any key to continue...");
+    wattroff(aboutWin, A_REVERSE);
+    touchwin(aboutWin);
+    wrefresh(aboutWin);
+    getch();
+    delwin(aboutWin);
+    clear();
+    DrawMain();
 }
