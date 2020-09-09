@@ -3,8 +3,7 @@
 int qsj = 1;            //登录菜单判断是否退出的标志
 int ActMm = 0;          //代表当前主菜单激活的号码
 int key = 0;            //用户从键盘输如的选择
-char *MainMenu[MAINI] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
-
+char *MainMenu[5] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
 
 
 int login_menu()
@@ -54,7 +53,7 @@ void DrawMain(void)           //画主菜单
     mvaddstr(6, 15+LeftCol, strArr[3]);
 
 
-    for ( i = 0; i < MAINI; i++ ) {
+    for ( i = 0; i < 5; i++ ) {
         mvaddstr(10+i*4, 30+LeftCol, MainMenu[i]);     //打印主菜单
     }
 
@@ -85,19 +84,15 @@ void SelectMenu(void)         //处理用户按键，调用相应的功能函数
                 break;
 
             case 1:
-                Process();
                 break;
             
             case 2:
-                Process();
                 break;
             
             case 3:
-                Process();
                 break;
 
             case 4:
-                Process();
                 break;
 
             default:
@@ -148,7 +143,7 @@ void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)  
 
 }
 
-void Process(void)        //显示内容不同的对话框
+void Process(char *str1, char *str2)        //显示内容不同的对话框
 {
     WINDOW *aboutWin;                    //声明一个新的窗口
     clear();

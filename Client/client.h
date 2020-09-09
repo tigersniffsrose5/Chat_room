@@ -29,7 +29,6 @@
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
 #define RightCol 108    //列末尾
-#define MAINI 5         //界面可选项数目
 
 static int conn_fd;
 
@@ -40,7 +39,7 @@ void SelectMenu(void);
 void SelectMainMenu(void);     
 void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
-void Process();
+void Process(char *str1, char *str2);
 void my_err(const char * err_string, int line);              //自己写的错误提示函数
 char *pas(char *s);             //登录时密码不回显
 int getch1(void);
