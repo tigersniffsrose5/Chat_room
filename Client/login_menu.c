@@ -152,8 +152,8 @@ void Process(char *str1, char *str2)        //显示内容不同的对话框
     aboutWin = newwin(13, 40, 8, 48);
     Wind(aboutWin, 0, 0, 12, 39);
 
-    mvwaddstr(aboutWin, 2, 10, "******敬请期待******");
-    mvwaddstr(aboutWin, 6, 10, "*******权诗佳*******");
+    mvwaddstr(aboutWin, 2, 10, str1);
+    mvwaddstr(aboutWin, 6, 10, str2);
 
     wattron(aboutWin, A_REVERSE);
     mvwaddstr(aboutWin, 9, 6, "Press any key to continue...");
