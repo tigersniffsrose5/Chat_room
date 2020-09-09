@@ -189,3 +189,184 @@ cJSON*cJSON_GetArrayItem(cJSON *array,int item);
 （3）对我们刚取出来的数组people，调用cJSON_GetArraySize()函数，来获取数组中对象的个数。然后，多次调用cJSON_GetArrayItem()函数，逐个读取数组中对象的内容。
 
 （4）通过cJSON_Delete()，释放cJSON_Parse()分配出来的内存空间。
+
+3，创建一个键值对
+         首先是一个简单的键值对字符串，要生成的目标如下：
+
+{"firstName":"Brett"}
+
+要进行创建，就是先确定键与值，然后转为cJSON格式。我们很容易就能明确键为firstName，值为Brett，可是，使用cJSON怎么创建呢？ 
+
+对于这个简单的例子，我们需要调用cJSON的五个接口函数就可以实现创建了。（有人不乐意了：都五个函数了，你还说“就可以了”----其实是一法通，百法通，学会了这个创建，其他的创建动作都是非常类似的。）
+
+这五个函数的原型如下：
+
+cJSON*cJSON_CreateObject ();
+
+cJSON*cJSON_CreateString(const char *string);
+
+voidcJSON_AddItemToObject(cJSON *object,const char *string,cJSON *item);
+
+voidcJSON_Delete(cJSON *c);
+
+char*cJSON_Print(cJSON *item); 
+
+下面按创建过程来描述一次：
+
+（1）       首先调用cJSON_ CreateObject ()函数，创建一个JSON对象，之后便可向这个对象中添加string或int等内容的数据项了。使用该函数会通过malloc()函数在内存中开辟一个空间，使用完成需要手动释放。
+
+        cJSON*root=cJSON_CreateObject();
+
+（2）       调用cJSON_CreateString ()函数，由一个字符串生成一个cJSON的数据项。
+
+        cJSON*item=cJSON_CreateString("Brett");
+
+（3）       将上一步生成的数据项与其键值（"firstName"）一起添加到root对象中。
+
+        cJSON_AddItemToObject(root,"firstName",item);
+
+其实到这一步，我们在内存中的cJSON对象就已经构建完成了，后面是展示结果了。
+
+（4）       将cJSON对象的内容解析为字符串，并展示出来。
+
+        out=cJSON_Print(root);
+
+        printf("out:%s\n",out);
+
+（5）       通过cJSON_Delete()，释放cJSON_CreateObject ()分配出来的内存空间。
+
+        cJSON_Delete(root);
+
+（6）       释放cJSON_Print ()分配出来的内存空间。
+
+        free(out); 
+
+         这样就完成了一次cJSON接口调用，实现了字符串的创建工作。
+
+4，转换一个结构体 
+接下来，我们来个复杂一点的，将一个结构体转换为JSON字符串，结构体定义如下：
+
+typedefstruct
+
+{
+
+         char firstName[32];
+
+         char lastName[32];
+
+         char email[64];
+
+         int age;
+
+         float height;
+
+} PERSON;
+
+看起来比一个键值对复杂多了，我们又需要学习新的接口函数了吗？
+
+是的，由于出现了数字，我们需要学习一个新函数：
+
+cJSON *cJSON_CreateNumber(double num);
+
+当然，创建的步骤要更复杂一些，下面我仍然是按创建过程来描述一次： 
+
+（1）还是先调用cJSON_ CreateObject ()函数，创建一个JSON对象root，做为根（咱们可以把JSON串看成是一颗树）。使用该函数会通过malloc()函数在内存中开辟一个空间，使用完成需要手动释放。
+
+        cJSON*root=cJSON_CreateObject();
+
+（2）继续调用cJSON_ CreateObject ()函数，创建一个JSON对象obj_person，做为挂载结构体内容的对象。挂载内容之后，这个对象是要挂载到根上的。
+
+        cJSON*obj_person=cJSON_CreateObject();
+
+（3）根据数据生成cJSON格式的数据项，调用cJSON_AddItemToObject()函数挂载到obj_person对象上。这个过程，要多次重复，直到将所有数据都添加上。此时要注意，不同的成员，生成的方法是不一样的。
+
+        cJSON*item=cJSON_CreateString(person->firstName);
+
+        cJSON_AddItemToObject(obj_person,"firstName",item);
+
+        item=cJSON_CreateString(person->lastName);
+
+        cJSON_AddItemToObject(obj_person,"lastName",item);
+
+        item=cJSON_CreateString(person->email);
+
+        cJSON_AddItemToObject(obj_person,"email",item);
+
+        item=cJSON_CreateNumber(person->age);
+
+        cJSON_AddItemToObject(obj_person,"age",item);
+
+        item=cJSON_CreateNumber(person->height);
+
+        cJSON_AddItemToObject(obj_person,"height",item);
+
+（4）将obj_person对象挂载到根上。
+
+        cJSON_AddItemToObject(root,"person",obj_person);
+
+到这一步，我们在内存中的cJSON对象就已经构建完成了，后面就是展示结果。
+
+（5）将cJSON对象的内容解析为字符串，并展示出来。
+
+        out=cJSON_Print(root);
+
+        printf("out:%s\n",out);
+
+（6）通过cJSON_Delete()，释放cJSON_CreateObject ()分配出来的内存空间。这里说明一下，我们前面调用了2次cJSON_CreateObject ()，最后只需要针对root调用一次释放即可，因为第二次创建的对象也是挂接在root上的。
+
+        cJSON_Delete(root);
+
+（7）释放cJSON_Print ()分配出来的内存空间。
+
+        free(out); 
+
+         至此，我们就使用cJSON接口完成了由结构体生成JSON字符串的工作。 
+
+5，创建结构体数组的JSON串   
+         最后，我们来个更复杂一些的，来转换一个数组，并且数组的成员是结构体！我们要生成的目标如下：
+
+{
+
+"people":[
+
+{"firstName":"z","lastName":"Jason","email":"bbbb@126.com","height":1.67},
+
+{"lastName":"jadena","email":"jadena@126.com","age":8,"height":1.17},
+
+{"email":"cccc@126.com","firstName":"z","lastName":"Juliet","age":36,"height":1.55}
+
+]
+
+} 
+
+此时，我们又需要学习新的接口了，一个是创建数组，一个是取数组成员，函数原型如下：
+
+cJSON*cJSON_CreateArray(void);
+
+void   cJSON_AddItemToArray(cJSON *array, cJSON*item); 
+
+由于前面已经实现了单个结构体的转换，这里我们重点关注下数组的相关调用。 
+
+（1）还是先调用cJSON_ CreateObject ()函数，创建一个JSON对象root，做为根。
+
+（2）调用cJSON_CreateArray ()函数，创建一个JSON数组对象，准备挂载多个结构体对象。挂载内容之后，这个数组对象是要挂载到根上的。
+
+        cJSON*array_person=cJSON_CreateArray();
+
+（3）生成一个结构体对象，并相应添加数据，然后调用cJSON_AddItemToArray()函数挂载到数组对象上。这个过程，要多次重复，直到将所有结构体对象都添加上。
+
+        cJSON_AddItemToArray(array_person,obj_person);
+
+（4）将数组对象挂载到根上。
+
+        cJSON_AddItemToObject(root,"people",array_person);
+
+到这一步，我们在内存中的cJSON对象就已经构建完成了。
+
+（5）将cJSON对象的内容解析为字符串，并展示出来。
+
+（6）通过cJSON_Delete()，释放cJSON_CreateObject ()分配出来的内存空间。
+
+（7）释放cJSON_Print ()分配出来的内存空间。
+
+         这样，我们就使用cJSON接口完成了将结构体数组转换成JSON字符串的工作。
