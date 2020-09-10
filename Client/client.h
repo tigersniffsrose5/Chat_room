@@ -1,3 +1,5 @@
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <stdio.h>
 #include <time.h>
@@ -23,24 +25,31 @@
 #define ESC 27
 #define ENTER '\r'
 #define TAB '\t'
-#define Backspace 8
+#define Backspace 127
 #define SPACE 32
 #define UpRow 0         //行起始
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
 #define RightCol 108    //列末尾
 
-static int conn_fd;
+extern int conn_fd;
+extern int ActSm;
+extern char *RegisteMenu[3];
+
 
 int login_menu();              //登录界面主函数
 void Initial(void);            //登录菜单启动函数
 void DrawMain(void);           //画登录菜单                  
 void SelectMenu(void);            
 void SelectMainMenu(void);     
+void SelectSubMenu(int);
 void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
-void Process(char *str1, char *str2);
+void Process(void);
 void my_err(const char * err_string, int line);              //自己写的错误提示函数
 char *pas(char *s);             //登录时密码不回显
 int getch1(void);
 void registe();                //注册函数
+
+
+#endif

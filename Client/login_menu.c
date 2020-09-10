@@ -6,6 +6,8 @@ int key = 0;            //用户从键盘输如的选择
 char *MainMenu[5] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
 
 
+
+
 int login_menu()
 {
 
@@ -87,12 +89,14 @@ void SelectMenu(void)         //处理用户按键，调用相应的功能函数
                 break;
             
             case 2:
+                registe();
                 break;
             
             case 3:
                 break;
 
             case 4:
+                Process();
                 break;
 
             default:
@@ -118,13 +122,33 @@ void SelectMainMenu(void)
     attron(A_REVERSE);
     mvaddstr(10+ActMm*4, 30+LeftCol, MainMenu[ActMm]);
     attroff(A_REVERSE);
+
 }
- 
+
+void SelectSubMenu(int key1) 
+{
+    mvaddstr(10+ActSm*4, 58, RegisteMenu[ActSm]);
+    move(10+ActSm*4,58);
+    if ( key1 == KEY_UP ) {
+        ActSm = ActSm == 0 ? ActSm+2 : ActSm-1;
+    }
+
+    else {
+        ActSm = ActSm == 2 ? 0 : ActSm+1;
+    }
+
+    attron(A_REVERSE);
+    mvaddstr(10+ActSm*4, 58, RegisteMenu[ActSm]);
+    attroff(A_REVERSE);
+
+}
+
 void QuitProg(void)      //退出函数
 {
     clear();
     refresh();
     endwin();
+
 }
 
 void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)   //构造边框函数
@@ -143,25 +167,25 @@ void Wind(WINDOW *win, int nBeginRow, int nBeginCol, int nEndRow, int nEndCol)  
 
 }
 
-void Process(char *str1, char *str2)        //显示内容不同的对话框
+void Process(void)        //显示内容不同的对话框
 {
     WINDOW *aboutWin;                    //声明一个新的窗口
     clear();
     touchwin(stdscr);                    //激活stdrc窗口
-    wrefresh(stdscr);                    
+    wrefresh(stdscr);                    //将窗口显示出来
     aboutWin = newwin(13, 40, 8, 48);
     Wind(aboutWin, 0, 0, 12, 39);
 
-    mvwaddstr(aboutWin, 2, 10, str1);
-    mvwaddstr(aboutWin, 6, 10, str2);
-
+    mvwaddstr(aboutWin, 2, 10, "*****敬请期待*****");
+    mvwaddstr(aboutWin, 6, 10, "*****QSJ_ZHTX*****");
     wattron(aboutWin, A_REVERSE);
-    mvwaddstr(aboutWin, 9, 6, "Press any key to continue...");
+    mvwaddstr(aboutWin, 10, 6, "Press any key to continue...");
     wattroff(aboutWin, A_REVERSE);
-    touchwin(aboutWin);
+    touchwin(aboutWin);                
     wrefresh(aboutWin);
     getch();
     delwin(aboutWin);
     clear();
     DrawMain();
+
 }
