@@ -19,7 +19,7 @@ int login_menu()
     DrawMain();                                             //在屏幕上画出主菜单
     SelectMenu();                                           //对用户的操作进行相应的处理
     
-    return 0;
+    return qsj;
 }
 
 void Initial(void)
@@ -54,7 +54,6 @@ void DrawMain(void)           //画主菜单
     mvaddstr(5, 15+LeftCol, strArr[2]);
     mvaddstr(6, 15+LeftCol, strArr[3]);
 
-
     for ( i = 0; i < 5; i++ ) {
         mvaddstr(10+i*4, 30+LeftCol, MainMenu[i]);     //打印主菜单
     }
@@ -65,10 +64,10 @@ void DrawMain(void)           //画主菜单
 
 }
 
-void SelectMenu(void)         //处理用户按键，调用相应的功能函数    
+int  SelectMenu(void)         //处理用户按键，调用相应的功能函数    
 {
     
-    while ( qsj != 0 ) {
+    while ( 1 ) {
 
         key = getch();
 
@@ -83,7 +82,7 @@ void SelectMenu(void)         //处理用户按键，调用相应的功能函数
             case 0:
                 QuitProg();
                 qsj = 0;
-                break;
+                return qsj;
 
             case 1:
                 break;

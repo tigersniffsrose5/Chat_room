@@ -3,51 +3,86 @@
 
 void registe()
 {
-    int x,y;
-    int key1 = 0;
     WINDOW *aboutWin;                    //声明一个新的窗口
-    char str1[30];
-    char str2[30];
+    int sex, key, n = 0, flag;
+    char name[30];
+    char password[30];
+    char Sex[2][4] = {"男","女"};
+    cJSON *root = cJSon_C
+
 
     clear();
     touchwin(stdscr);                    //激活stdrc窗口
     wrefresh(stdscr);                    //将窗口显示出来
-    aboutWin = newwin(13, 40, 8, 48);
-    Wind(aboutWin, 0, 0, 12, 39);
-
-    wattron(aboutWin, A_REVERSE);
-    mvwaddstr(aboutWin, 2, 10, RegisteMenu[0]);
-    wattroff(aboutWin, A_REVERSE);
-    mvwaddstr(aboutWin, 6, 10, RegisteMenu[1]);
-
-    mvwaddstr(aboutWin, 10, 10, RegisteMenu[2]);
+    aboutWin = newwin(16, 40, 8, 48);
+    Wind(aboutWin, 0, 0, 15, 39);
     touchwin(aboutWin);                
     wrefresh(aboutWin);
+
+    echo();
+    curs_set(1);
+    keypad(stdscr, FALSE);
+
+    mvprintw(10, 58, RegisteMenu[0]);
+    move(11,65);
+    scanw("%s", name);
+    mvprintw(14, 58, RegisteMenu[1]);
+    move(15,65);
+    scanw("%s", password);
     
-    curs_set(1);        
-    move(60,14);
-    while (1) {
+    noecho();
+    curs_set(0);
+    keypad(stdscr, TRUE);
 
-        key1 = getch();
-
-        if ( key1 == KEY_UP || key1 == KEY_DOWN ) {
-            SelectSubMenu(key1);
-        }
-
-        else if ( key1 == ENTER ) {
+    mvprintw(18, 58, "*****请选择性别*****");
+    attron(A_REVERSE);
+    mvaddstr(19,64, Sex[0]);
+    attroff(A_REVERSE);
+    mvaddstr(19,67, "||");
+    mvaddstr(19,70, Sex[1]);
+    
+    while ( 1 ) {
         
-            nl();
-            echo();
+        key = getch();
 
-            switch( ActSm ) {
-
-            case 0:
-                getyx(aboutWin,y,x);
-                printw("%d %d", x, y);
-                //move(60,14);
-                //scanw("%s", str1);
+        if ( key == KEY_LEFT || key == KEY_RIGHT ) {
+            
+            mvaddstr(19, 64+n*6, Sex[n]);
+            
+            if ( key == KEY_LEFT ) {
+                n = n == 0 ? 1 : 0;
             }
+
+            else {
+                n = n == 1 ? 0 : 1;
+            }
+
+            attron(A_REVERSE);
+            mvaddstr(19,64+n*6,Sex[n]);
+            attroff(A_REVERSE);
+
         }
 
+        else if ( key == ENTER ) {
+            
+            if ( n == 0 ) {
+                sex = 1;
+            }
+
+            else { 
+                sex = 0;
+            }
+            
+            break;
+
+        }
     }
+
+    mvprintw(22,58,RegisteMenu[2]);
+    getch();
+
+    delwin(aboutWin);
+    clear();
+    DrawMain();
+
 }

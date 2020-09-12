@@ -22,11 +22,7 @@
 #pragma comment(lib, "libmysql.lib") 
 
 #define PORT 1212
-#define ESC 27
 #define ENTER '\r'
-#define TAB '\t'
-#define Backspace 127
-#define SPACE 32
 #define UpRow 0         //行起始
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
@@ -40,7 +36,7 @@ extern char *RegisteMenu[3];
 int login_menu();              //登录界面主函数
 void Initial(void);            //登录菜单启动函数
 void DrawMain(void);           //画登录菜单                  
-void SelectMenu(void);            
+int  SelectMenu(void);            
 void SelectMainMenu(void);     
 void SelectSubMenu(int);
 void QuitProg(void);
