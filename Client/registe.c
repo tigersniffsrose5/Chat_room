@@ -8,7 +8,8 @@ void registe()
     char name[30];
     char password[30];
     char Sex[2][4] = {"男","女"};
-    cJSON *root = cJSon_C
+    cJSON *root;
+    cJSON *item;
 
 
     clear();
@@ -80,6 +81,24 @@ void registe()
 
     mvprintw(22,58,RegisteMenu[2]);
     getch();
+    
+    root = cJSON_CreateObject();
+    item = cJSON_CreateString("R");
+    cJSON_AddItemToObject(root, "type", item);
+    item = cJSON_CreateString(name);
+    cJSON_AddItemToObject(root,"name",item);
+    item = cJSON_CreateBool(sex);
+    cJSON_AddItemToObject(root ,"sex" ,item);
+    item = cJSON_CreateString(password);
+    cJSON_AddItemToObject(root,"password",item);
+    char *out = cJSON_Print(root);
+
+    if ( send(conn_fd, out, 1024, 0) < 0 ) {
+        my_err("send", __LINE__);
+    }    
+
+    cJSON_Delete(root);
+    free(out);
 
     delwin(aboutWin);
     clear();

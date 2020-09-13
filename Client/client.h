@@ -19,7 +19,9 @@
 #include<libgen.h>
 #include <curses.h>
 #include <locale.h>
-#pragma comment(lib, "libmysql.lib") 
+#include "Common/cJSON.h"
+#include "Common/libb64/include/b64/cdecode.h"
+#include "Common/libb64/include/b64/cencode.h"
 
 #define PORT 1212
 #define ENTER '\r'
