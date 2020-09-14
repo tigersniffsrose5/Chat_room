@@ -29,6 +29,7 @@
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
 #define RightCol 108    //列末尾
+#define MSG_LEN 1024
 
 extern int conn_fd;
 extern int ActSm;
