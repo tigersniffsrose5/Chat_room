@@ -20,8 +20,6 @@
 #include <curses.h>
 #include <locale.h>
 #include "Common/cJSON.h"
-#include "Common/libb64/include/b64/cdecode.h"
-#include "Common/libb64/include/b64/cencode.h"
 #include <mysql/mysql.h>
 #include <sys/epoll.h>
 #pragma comment(lib, "libmysql.lib") 
@@ -30,8 +28,18 @@
 #define MSG_LEN 1024
 
 extern int conn_fd, sock_fd;
-extern MYSQL mysql;
+extern MYSQL *mysql;
+
+typedef struct {
+    int fd;
+    char json[MSG_LEN];
+}pack;
 
 void my_err(const char * err_string, int line);
 void mysql_init_t();
+void thread(void *arg);                                                            //服务端工作线程
+int Account_Perst_IsUserName(const char *name);                                    //数据库检查是否重名 
+void Account_Perst_AddUser(const char *name, int sex, const char *password);       //数据库添加新用户
+void registe(pack *recv);                                                          //注册
+
 #endif

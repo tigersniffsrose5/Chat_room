@@ -8,6 +8,7 @@ int main()
     struct epoll_event ev, events[1000];
     char buf[MSG_LEN];
     pthread_t thid;
+    pack *p;
 
     mysql_init_t();
     
@@ -92,8 +93,12 @@ int main()
                     recv_len += ret;
 
                 }
+                
+                p = (pack *)malloc(sizeof(pack));
+                p->fd = events[i].data.fd;
+                memcpy(p->json, &buf, sizeof(buf));
 
-                if ( pthread_create(&thid, NULL, thread, (void *)(long)events[i].data.fd ) != 0 ) { 
+                if ( pthread_create(&thid, NULL, thread, (void *)p) != 0 ) { 
                     my_err("pthread_create", __LINE__); 
                 } 
             
