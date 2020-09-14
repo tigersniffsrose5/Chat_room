@@ -25,7 +25,7 @@ void registe(pack *recv)
         cJSON_AddItemToObject(root , "res" , item);
         char *out = cJSON_Print(root);
         
-        if( send(sock_fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0){
             my_err("send", __LINE__);
         }
         
@@ -40,7 +40,7 @@ void registe(pack *recv)
     cJSON_AddItemToObject(root, "res", item);
     char *out = cJSON_Print(root);
 
-    if( send(sock_fd , out, MSG_LEN, 0) < 0){
+    if( send(recv->fd , out, MSG_LEN, 0) < 0){
         my_err("send", __LINE__);
     }
 
@@ -57,7 +57,7 @@ int Account_Perst_IsUserName(const char *name)
     MYSQL_ROW row;
     int rtn = 0;
     
-    sprintf(SQL,"SELECT uid FROM account WHERE name = '%s'",name);
+    sprintf(SQL,"SELECT uid FROM user_info  WHERE name = '%s'",name);
     
     if( mysql_real_query(mysql , SQL , strlen(SQL)) ){
 
@@ -86,7 +86,7 @@ void Account_Perst_AddUser(const char *name, int sex, const char *password)
 {
     char SQL[100];
     
-    sprintf(SQL,"INSERT INTO account VALUES (NULL, '%s', '%d', md5('%s'))", name, sex, password);
+    sprintf(SQL,"INSERT INTO user_info VALUES (NULL, '%s', '%d', md5('%s'))", name, sex, password);
     
     if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
         

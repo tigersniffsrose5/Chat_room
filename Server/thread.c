@@ -1,6 +1,6 @@
 #include "server.h"
 
-void thread(void *arg)
+void Thread(void *arg)
 {
     pack *p = (pack *)arg;
     cJSON *root, *item;

@@ -35,9 +35,10 @@ typedef struct {
     char json[MSG_LEN];
 }pack;
 
+
 void my_err(const char * err_string, int line);
 void mysql_init_t();
-void thread(void *arg);                                                            //服务端工作线程
+void Thread(void *arg);                                                            //服务端工作线程
 int Account_Perst_IsUserName(const char *name);                                    //数据库检查是否重名 
 void Account_Perst_AddUser(const char *name, int sex, const char *password);       //数据库添加新用户
 void registe(pack *recv);                                                          //注册

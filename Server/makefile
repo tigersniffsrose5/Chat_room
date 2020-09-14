@@ -1,8 +1,8 @@
 CC = gcc
 
-vpath %.h ./Common/libb64/include/b64/ ./Common/
+vpath %.h  ./Common/
 
-CFLAGS = -g -w -lpthread -lmysqlclient -ICommon/libb64/include
+CFLAGS = -g -w -lpthread -lmysqlclient 
 
 TARGET = server
 
@@ -20,6 +20,6 @@ $(TARGET):$(ObjFile)
 	clean
 
 clean:
-	rm -rf *.o client
+	rm -rf *.o server
 
 

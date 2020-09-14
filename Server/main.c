@@ -93,17 +93,19 @@ int main()
                     recv_len += ret;
 
                 }
-                
+
                 p = (pack *)malloc(sizeof(pack));
                 p->fd = events[i].data.fd;
                 memcpy(p->json, &buf, sizeof(buf));
 
-                if ( pthread_create(&thid, NULL, thread, (void *)p) != 0 ) { 
+                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
                     my_err("pthread_create", __LINE__); 
                 } 
-            
+
             }
         }
     }
 
+    mysql_close(mysql);
+    return 0;
 }
