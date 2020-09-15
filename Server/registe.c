@@ -3,7 +3,7 @@
 void registe(pack *recv)
 {
     char name[30], password[30];
-    int sex;
+    int sex, uid;
     cJSON *root, *item;
 
     root = cJSON_Parse(recv->json);
@@ -16,21 +16,22 @@ void registe(pack *recv)
     cJSON_Delete(root);
 
     root = cJSON_CreateObject();
-    item = cJSON_CreateNumber(0);
-    cJSON_AddItemToObject(root, "type", item);
+    uid = Account_Perst_IsUserName(name); 
 
-    if ( Account_Perst_IsUserName(name) ) {
+    if ( uid ) {
         
         item = cJSON_CreateBool(0);
         cJSON_AddItemToObject(root , "res" , item);
         char *out = cJSON_Print(root);
         
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if ( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             my_err("send", __LINE__);
         }
         
         cJSON_Delete(root);
         free(out);
+        
+        return;
 
     }
 
@@ -38,6 +39,8 @@ void registe(pack *recv)
 
     item = cJSON_CreateBool(1);
     cJSON_AddItemToObject(root, "res", item);
+    item = cJSON_CreateNumber(uid);
+    cJSON_AddItemToObject(root, "uid", item);
     char *out = cJSON_Print(root);
 
     if( send(recv->fd , out, MSG_LEN, 0) < 0){
@@ -96,4 +99,3 @@ void Account_Perst_AddUser(const char *name, int sex, const char *password)
     }
 
 }
-
