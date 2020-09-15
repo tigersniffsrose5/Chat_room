@@ -48,7 +48,7 @@ void Process(void);
 void my_err(const char * err_string, int line);              //自己写的错误提示函数
 char *pas(char *s);             //登录时密码不回显
 int getch1(void);
-void registe();                //注册函数
-
+void registe();                //注册
+void login();                  //登录
 
 #endif
