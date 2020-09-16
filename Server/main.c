@@ -2,7 +2,7 @@
 
 int main()
 {
-    int optval, epfd, nfds, i, ret, recv_len;
+    int optval, epfd, nfds, i, ret, recv_len, flag;
     socklen_t len;
     struct sockaddr_in cli_addr, serv_addr;
     struct epoll_event ev, events[1000];
@@ -61,7 +61,8 @@ int main()
             }
 
             else if ( events[i].events & EPOLLIN ) {
-
+                
+                flag = 1;
                 bzero(&buf, sizeof(buf));
                 recv_len = 0;
 
@@ -71,27 +72,32 @@ int main()
                     ret = recv(events[i].data.fd,buf+recv_len,MSG_LEN-recv_len, MSG_WAITALL);
 
                     if ( ret < 0 ) {
-
+                        
                         close(events[i].data.fd);
                         my_err("recv", __LINE__);
-                        continue;
+                        break;
 
                     }
-                    //
-                    //                    else if( ret == 0 ) {
-                    //
-                    //                        delet(&head, events[i].data.fd);
-                    //                        printf("客户端已关闭\n");
-                    //                        ev.data.fd = events[i].data.fd;
-                    //                        epoll_ctl(epfd, EPOLL_CTL_DEL, events[i].data.fd, &ev);
-                    //                        close(events[i].data.fd);
-                    //                        continue;
-                    //
-                    //                    }
-                    //
-                    
+
+                    else if( ret == 0 ) {
+
+                        //delet(&head, events[i].data.fd);
+                        flag = 0;
+                        printf("客户端已关闭\n");
+                        ev.data.fd = events[i].data.fd;
+                        epoll_ctl(epfd, EPOLL_CTL_DEL, events[i].data.fd, &ev);
+                        close(events[i].data.fd);
+                        break;
+                        
+                    }
+
+
                     recv_len += ret;
 
+                }
+                    
+                if ( flag == 0 ) {
+                    continue;
                 }
 
                 p = (pack *)malloc(sizeof(pack));
