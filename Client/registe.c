@@ -4,7 +4,7 @@
 void registe()
 {
     WINDOW *aboutWin;                    //声明一个新的窗口
-    int sex, key, n = 0, ret, recv_len, flag, uid;
+    int sex, key, n = 0, ret, recv_len, flag, id;
     char name[30];
     char password[30];
     char message[MSG_LEN];
@@ -83,7 +83,7 @@ void registe()
 
     mvprintw(22,58,RegisteMenu[2]);
     getch();
-    
+
     root = cJSON_CreateObject();
     item = cJSON_CreateNumber(0);
     cJSON_AddItemToObject(root, "type", item);
@@ -118,10 +118,14 @@ void registe()
     root = cJSON_Parse(message);
     item = cJSON_GetObjectItem(root, "res");
     flag = item->valueint;
-    item = cJSON_GetObjectItem(root, "uid");
-    uid = item->valueint;
+
+    if ( flag == 1 ) {
+        item = cJSON_GetObjectItem(root, "uid");
+        id = item->valueint;
+    }
+
     cJSON_Delete(root);
-    
+
     clear();
     touchwin(stdscr);                    //激活stdrc窗口
     wrefresh(stdscr);                    //将窗口显示出来
@@ -133,7 +137,7 @@ void registe()
 
     if ( flag == 1 ) {
         mvprintw(14, 58, "******注册成功******");
-        mvprintw(18,58,"*这是你的验证码： %d*", uid);
+        mvprintw(18,58,"*这是你的验证码： %d*", id);
     }
 
     else {
@@ -141,6 +145,7 @@ void registe()
         mvprintw(18, 58, "*****用户已注册*****");
     }
 
+    
     mvprintw(22,58,RegisteMenu[2]);
     getch();
     

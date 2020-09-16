@@ -6,7 +6,6 @@ void login()
    int ret, recv_len, flag;
    char name[30];
    char password[30];
-   char s[30];
    char message[MSG_LEN];
    cJSON *root;
    cJSON *item;
@@ -28,12 +27,12 @@ void login()
     scanw("%s", name);
     mvprintw(16, 58, RegisteMenu[1]);
     move(17,65);
-    scanw("%s", password);
-
     noecho();
+    scanw("%s", password);
+    
     curs_set(0);
     keypad(stdscr, TRUE);
-
+    
     mvprintw(20,58,RegisteMenu[2]);
     getch();
 
