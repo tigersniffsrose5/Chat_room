@@ -3,7 +3,7 @@
 void login()
 {
     WINDOW *aboutWin;
-    int ret, recv_len, flag;
+    int ret, recv_len, flag, code;
     char name[30];
     char password[30];
     char message[MSG_LEN];
@@ -25,11 +25,11 @@ void login()
     mvprintw(12, 58, RegisteMenu[0]);
     move(13,65);
     scanw("%s", name);
-    mvprintw(16, 58, RegisteMenu[1]);
+    mvprintw(16, 58, "****请输入验证码****");
     move(17,65);
     noecho();
-    scanw("%s", password);
-    
+    scanw("%d", &code);
+
     curs_set(0);
     keypad(stdscr, TRUE);
     
@@ -41,8 +41,8 @@ void login()
     cJSON_AddItemToObject(root, "type", item);
     item = cJSON_CreateString(name);
     cJSON_AddItemToObject(root,"name",item);
-    item = cJSON_CreateString(password);
-    cJSON_AddItemToObject(root,"password",item);
+    item = cJSON_CreateNumber(code);
+    cJSON_AddItemToObject(root,"code",item);
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
@@ -81,21 +81,21 @@ void login()
 
     if ( flag == 3 ) {
     
-        mvprintw(14, 58, "******登录成功******");
+        mvprintw(14, 58, "****找回密码成功****");
     
     }
 
     else if ( flag == 1 ) {
         
-        mvprintw(12, 58, "******登录失败******");
-        mvprintw(16, 58, "******密码错误******");
+        mvprintw(12, 58, "****找回密码失败****");
+        mvprintw(16, 58, "*****没有此用户*****");
     
     }
 
     else if ( flag == 2 ) {
         
-        mvprintw(12, 58, "******登录失败******");
-        mvprintw(16, 58, "*****用户已登录*****");
+        mvprintw(12, 58, "****找回密码失败****");
+        mvprintw(16, 58, "*****验证码错误*****");
     
     }
 
@@ -107,4 +107,5 @@ void login()
     DrawMain();
 
 }
+
 

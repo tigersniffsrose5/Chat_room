@@ -136,17 +136,17 @@ void registe()
 
 
     if ( flag == 1 ) {
-        mvprintw(14, 58, "******注册成功******");
-        mvprintw(18,58,"*这是你的验证码： %d*", id);
+        mvprintw(12, 58, "******注册成功******");
+        mvprintw(16,58,"*这是你的验证码： %d*", id);
     }
 
     else {
-        mvprintw(14, 58, "******注册失败******");
-        mvprintw(18, 58, "*****用户已注册*****");
+        mvprintw(12, 58, "******注册失败******");
+        mvprintw(16, 58, "*****用户已注册*****");
     }
 
     
-    mvprintw(22,58,RegisteMenu[2]);
+    mvprintw(20,58,RegisteMenu[2]);
     getch();
     
     delwin(aboutWin);
