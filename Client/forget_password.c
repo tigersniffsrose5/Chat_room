@@ -1,6 +1,6 @@
 #include "client.h"
 
-void login()
+void forget_password()
 {
     WINDOW *aboutWin;
     int ret, recv_len, flag, code;
@@ -27,9 +27,9 @@ void login()
     scanw("%s", name);
     mvprintw(16, 58, "****请输入验证码****");
     move(17,65);
-    noecho();
     scanw("%d", &code);
 
+    noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
     
@@ -37,7 +37,7 @@ void login()
     getch();
 
     root = cJSON_CreateObject();
-    item = cJSON_CreateNumber(1);
+    item = cJSON_CreateNumber(2);
     cJSON_AddItemToObject(root, "type", item);
     item = cJSON_CreateString(name);
     cJSON_AddItemToObject(root,"name",item);
@@ -80,21 +80,40 @@ void login()
 
 
     if ( flag == 3 ) {
-    
-        mvprintw(14, 58, "****找回密码成功****");
-    
+
+        curs_set(1);
+        keypad(stdscr, FALSE);
+
+        mvprintw(12, 58, "****验证身份成功****");
+        mvprintw(16, 58, "****请输入新密码****");
+        move(17,65);
+        scanw("%s", password);
+
+        root = cJSON_CreateObject();
+        item = cJSON_CreateNumber(2);
+        cJSON_AddItemToObject(root, "type", item);
+        item = cJSON_CreateString(password);
+        cJSON_AddItemToObject(root,"password",item);
+
+        if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
+            my_err("send", __LINE__);
+        }
+
+        curs_set(0);
+        keypad(stdscr, TRUE);
+
     }
 
     else if ( flag == 1 ) {
-        
-        mvprintw(12, 58, "****找回密码失败****");
+
+        mvprintw(12, 58, "****验证身份失败****");
         mvprintw(16, 58, "*****没有此用户*****");
     
     }
 
     else if ( flag == 2 ) {
         
-        mvprintw(12, 58, "****找回密码失败****");
+        mvprintw(12, 58, "****验证身份失败****");
         mvprintw(16, 58, "*****验证码错误*****");
     
     }
