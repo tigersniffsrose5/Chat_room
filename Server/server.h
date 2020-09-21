@@ -43,6 +43,6 @@ int Account_Perst_IsUserName(const char *name);                                 
 void Account_Perst_AddUser(const char *name, int sex, const char *password);       //数据库添加新用户
 void registe(pack *recv);                                                          //注册
 void login(pack *recv);                                                            //登录
-int Account_Perst_MatchUserAndPassword(int uid , const char * password);           //检查密码对错
+int Account_Perst_MatchUserAndPassword(const char *name , const char *password);   //检查密码对错
 
 #endif

@@ -16,8 +16,9 @@ void registe(pack *recv)
     cJSON_Delete(root);
 
     root = cJSON_CreateObject();
-
-    if ( Account_Perst_IsUserName(name) ) {
+    uid = Account_Perst_IsUserName(name); 
+    
+    if ( uid ) {
         
         item = cJSON_CreateBool(0);
         cJSON_AddItemToObject(root , "res" , item);
@@ -38,7 +39,6 @@ void registe(pack *recv)
 
     item = cJSON_CreateBool(1);
     cJSON_AddItemToObject(root, "res", item);
-    uid = Account_Perst_IsUserName(name); 
     item = cJSON_CreateNumber(uid);
     cJSON_AddItemToObject(root, "uid", item);
     char *out = cJSON_Print(root);
