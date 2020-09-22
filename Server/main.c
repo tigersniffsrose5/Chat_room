@@ -81,7 +81,7 @@ int main()
 
                     else if( ret == 0 ) {
 
-                        //delet(&head, events[i].data.fd);
+                        delet(&head, events[i].data.fd);
                         flag = 0;
                         printf("客户端已关闭\n");
                         ev.data.fd = events[i].data.fd;

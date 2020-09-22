@@ -27,14 +27,20 @@
 #define PORT 1212
 #define MSG_LEN 1024
 
-extern int conn_fd, sock_fd;
-extern MYSQL *mysql;
-
 typedef struct {
     int fd;
     char json[MSG_LEN];
 }pack;
 
+typedef struct Node{
+    int fd;
+    char name[30];
+    struct Node *next;
+}node;
+
+extern int conn_fd, sock_fd;
+extern MYSQL *mysql;
+extern node *head;
 
 void my_err(const char * err_string, int line);
 void mysql_init_t();
@@ -47,5 +53,10 @@ int Account_Perst_MatchUserAndPassword(const char *name , const char *password);
 void Account_Perst_ChangePassword(const char *name, const char *password);         //修改密码
 void forget_password(pack *recv);                                                  //找回密码
 int recv1(int fd, char *buf, int len, int flags);                                  
+
+void add (node**Head, int fd_t, char *nam);                                        //单链表添加尾节点
+void fre (node *Head);                                                             //单链表free函数
+void delet ( node **Head, int fd_t );                                              //单链表删除节点函数
+int search( node *Head, char *nam );                                               //查询用户是否在线
 
 #endif

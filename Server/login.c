@@ -50,6 +50,25 @@ void login(pack *recv)
 
     }
 
+    if ( search(head, name) ) {
+        
+        item = cJSON_CreateNumber(2);
+        cJSON_AddItemToObject(root , "res" , item);
+        char *out = cJSON_Print(root);
+
+        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+            my_err("send", __LINE__);
+        }
+
+        cJSON_Delete(root);
+        free(out);
+
+        return;
+
+    }
+
+    add(&head, recv->fd, name);
+
     item = cJSON_CreateNumber(3);
     cJSON_AddItemToObject(root , "res" , item);
     char *out = cJSON_Print(root);
