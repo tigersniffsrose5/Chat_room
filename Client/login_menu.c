@@ -93,6 +93,7 @@ int  SelectMenu(void)         //处理用户按键，调用相应的功能函数
                 break;
             
             case 3:
+                forget_password();
                 break;
 
             case 4:

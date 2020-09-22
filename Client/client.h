@@ -50,5 +50,6 @@ char *pas(char *s);             //登录时密码不回显
 int getch1(void);
 void registe();                //注册
 void login();                  //登录
+void forget_password();        //找回密码
 
 #endif

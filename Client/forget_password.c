@@ -3,7 +3,7 @@
 void forget_password()
 {
     WINDOW *aboutWin;
-    int ret, recv_len, flag, code;
+    int ret, recv_len, flag = 0, code;
     char name[30];
     char password[30];
     char message[MSG_LEN];
@@ -26,7 +26,7 @@ void forget_password()
     move(13,65);
     scanw("%s", name);
     mvprintw(16, 58, "****请输入验证码****");
-    move(17,65);
+    move(17,66);
     scanw("%d", &code);
 
     noecho();
@@ -43,6 +43,8 @@ void forget_password()
     cJSON_AddItemToObject(root,"name",item);
     item = cJSON_CreateNumber(code);
     cJSON_AddItemToObject(root,"code",item);
+    item = cJSON_CreateNumber(flag);
+    cJSON_AddItemToObject(root,"flag",item);
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
@@ -89,19 +91,45 @@ void forget_password()
         move(17,65);
         scanw("%s", password);
 
+        curs_set(0);
+        keypad(stdscr, TRUE);
+
+        mvprintw(20,58,RegisteMenu[2]);
+        getch();
+
+        flag = 4;
+
         root = cJSON_CreateObject();
         item = cJSON_CreateNumber(2);
         cJSON_AddItemToObject(root, "type", item);
+        item = cJSON_CreateString(name);
+        cJSON_AddItemToObject(root,"name",item);
+        item = cJSON_CreateNumber(code);
+        cJSON_AddItemToObject(root,"code",item);
+        item = cJSON_CreateNumber(flag);
+        cJSON_AddItemToObject(root,"flag",item);
         item = cJSON_CreateString(password);
         cJSON_AddItemToObject(root,"password",item);
-
+        char *out = cJSON_Print(root);
+        
         if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
             my_err("send", __LINE__);
         }
 
-        curs_set(0);
-        keypad(stdscr, TRUE);
+        cJSON_Delete(root);
+        free(out);
 
+        clear();
+        touchwin(stdscr);                    //激活stdrc窗口
+        wrefresh(stdscr);                    //将窗口显示出来
+        aboutWin = newwin(16, 40, 8, 48);
+        Wind(aboutWin, 0, 0, 15, 39);
+        touchwin(aboutWin);
+        wrefresh(aboutWin);
+
+        mvprintw(12, 58, "****修改密码成功****");
+        mvprintw(16, 58, "***请保存好新密码***");
+ 
     }
 
     else if ( flag == 1 ) {
