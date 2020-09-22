@@ -3,7 +3,7 @@
 void forget_password(pack *recv)
 {
     char name[30], password[30];
-    int code, uid;
+    int code, uid, flag;
     cJSON *root, *item;
 
     root = cJSON_Parse(recv->json);
@@ -11,8 +11,23 @@ void forget_password(pack *recv)
     strcpy(name,item->valuestring);
     item = cJSON_GetObjectItem(root , "code");
     code = item->valueint;
-    cJSON_Delete(root);
+    item = cJSON_GetObjectItem(root , "flag");
+    flag = item->valueint;
 
+    if ( flag == 4 ) {
+        
+        item = cJSON_GetObjectItem(root, "password");
+        strcpy(password,item->valuestring);    
+        
+        cJSON_Delete(root);
+
+        Account_Perst_ChangePassword(name, password);
+        
+        return;
+    }
+
+    cJSON_Delete(root);
+    
     root = cJSON_CreateObject();
     uid = Account_Perst_IsUserName(name); 
 
@@ -20,6 +35,7 @@ void forget_password(pack *recv)
 
         item = cJSON_CreateNumber(1);
         cJSON_AddItemToObject(root , "res" , item);
+
         char *out = cJSON_Print(root);
 
         if( send(recv->fd , out, MSG_LEN, 0) < 0){
@@ -33,10 +49,11 @@ void forget_password(pack *recv)
 
     }
 
-    if ( Account_Perst_MatchUserAndPassword(name ,password) == 0 ) {
+    if ( uid != code ) {
 
         item = cJSON_CreateNumber(2);
         cJSON_AddItemToObject(root , "res" , item);
+
         char *out = cJSON_Print(root);
 
         if( send(recv->fd , out, MSG_LEN, 0) < 0){
@@ -60,37 +77,25 @@ void forget_password(pack *recv)
 
     cJSON_Delete(root);
     free(out);
+    
+}
+
+void Account_Perst_ChangePassword(const char *name, const char *password)
+{
+    char SQL[100];
+
+    sprintf(SQL,"UPDATE user_info SET password = md5('%s') WHERE name = '%s'", password, name);
+
+    if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
+
+        printf("mysql_real_query update failure!\n");
+        exit(0);
+
+    }
 
 }
 
-int Account_Perst_MatchUserAndPassword(int uid , const char * password)
+int recv1(int fd, char *buf, int len, int flags)
 {
-    char SQL[100];
-    MYSQL_RES * res;
-    MYSQL_ROW row;
-    int rtn;
-
-    sprintf(SQL, "SELECT * FROM user_info WHERE (uid = '%d' AND password = md5('%s'))", uid, password);
-
-    if(mysql_real_query(mysql , SQL ,strlen(SQL))){
-        printf("mysql_real_query select failure!\n"); 
-        exit(0);
-    }
-
-    res = mysql_store_result(mysql);
-    row = mysql_fetch_row(res);
-
-    if ( row ) {
-
-        rtn = 1;
-    }
-
-    else {
-
-        rtn = 0;
-    } 
-
-    mysql_free_result(res);
-    return rtn;
-
+    return recv(fd, buf, len, flags);
 }

@@ -44,5 +44,8 @@ void Account_Perst_AddUser(const char *name, int sex, const char *password);    
 void registe(pack *recv);                                                          //注册
 void login(pack *recv);                                                            //登录
 int Account_Perst_MatchUserAndPassword(const char *name , const char *password);   //检查密码对错
+void Account_Perst_ChangePassword(const char *name, const char *password);         //修改密码
+void forget_password(pack *recv);                                                  //找回密码
+int recv1(int fd, char *buf, int len, int flags);                                  
 
 #endif

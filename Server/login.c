@@ -70,7 +70,7 @@ int Account_Perst_MatchUserAndPassword(const char *name , const char *password)
     MYSQL_ROW row;
     int rtn;
 
-    sprintf(SQL, "SELECT * FROM user_info WHERE (uid = '%s' AND password = md5('%s'))", name, password);
+    sprintf(SQL, "SELECT * FROM user_info WHERE (name = '%s' AND password = md5('%s'))", name, password);
 
     if(mysql_real_query(mysql , SQL ,strlen(SQL))){
         printf("mysql_real_query select failure!\n"); 
