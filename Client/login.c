@@ -1,6 +1,6 @@
 #include "client.h"
 
-void login()
+int login()
 {
     WINDOW *aboutWin;
     int ret, recv_len, flag;
@@ -85,6 +85,13 @@ void login()
     
     }
 
+    else if ( flag == 0 ) {
+        
+        mvprintw(12, 58, "******登录失败******");
+        mvprintw(16, 58, "*****没有此用户*****");
+
+    }
+
     else if ( flag == 1 ) {
         
         mvprintw(12, 58, "******登录失败******");
@@ -103,8 +110,7 @@ void login()
     getch();
 
     delwin(aboutWin);
-    clear();
-    DrawMain();
+    return flag;
 
 }
 

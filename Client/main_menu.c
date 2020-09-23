@@ -85,7 +85,10 @@ int  SelectMenu(void)         //处理用户按键，调用相应的功能函数
                 return qsj;
 
             case 1:
-                login();
+                if ( login() == 3 )
+                    function_menu();
+                clear();
+                DrawMain();
                 break;
             
             case 2:
