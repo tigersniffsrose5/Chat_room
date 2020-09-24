@@ -6,8 +6,6 @@ int key = 0;            //用户从键盘输如的选择
 char *MainMenu[5] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
 
 
-
-
 int login_menu()
 {
 
@@ -17,7 +15,7 @@ int login_menu()
     refresh();            
     curs_set(0);                                            //隐藏光标，0隐藏 1正常 2高亮显示
     DrawMain();                                             //在屏幕上画出主菜单
-    SelectMenu();                                           //对用户的操作进行相应的处理
+    SelectmainMenu();                                           //对用户的操作进行相应的处理
     
     return qsj;
 }
@@ -64,7 +62,7 @@ void DrawMain(void)           //画主菜单
 
 }
 
-int  SelectMenu(void)         //处理用户按键，调用相应的功能函数    
+int SelectmainMenu(void)         //处理用户按键，调用相应的功能函数    
 {
     
     while ( 1 ) {
@@ -86,7 +84,7 @@ int  SelectMenu(void)         //处理用户按键，调用相应的功能函数
 
             case 1:
                 if ( login() == 3 )
-                    function_menu();
+                    function();
                 clear();
                 DrawMain();
                 break;
@@ -101,9 +99,6 @@ int  SelectMenu(void)         //处理用户按键，调用相应的功能函数
 
             case 4:
                 Process();
-                break;
-
-            default:
                 break;
             
             }
@@ -125,24 +120,6 @@ void SelectMainMenu(void)
 
     attron(A_REVERSE);
     mvaddstr(10+ActMm*4, 30+LeftCol, MainMenu[ActMm]);
-    attroff(A_REVERSE);
-
-}
-
-void SelectSubMenu(int key1) 
-{
-    mvaddstr(10+ActSm*4, 58, RegisteMenu[ActSm]);
-    move(10+ActSm*4,58);
-    if ( key1 == KEY_UP ) {
-        ActSm = ActSm == 0 ? ActSm+2 : ActSm-1;
-    }
-
-    else {
-        ActSm = ActSm == 2 ? 0 : ActSm+1;
-    }
-
-    attron(A_REVERSE);
-    mvaddstr(10+ActSm*4, 58, RegisteMenu[ActSm]);
     attroff(A_REVERSE);
 
 }

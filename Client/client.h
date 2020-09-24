@@ -39,17 +39,19 @@ extern char *RegisteMenu[3];
 int login_menu();              //登录界面主函数
 void Initial(void);            //登录菜单启动函数
 void DrawMain(void);           //画登录菜单                  
-int  SelectMenu(void);            
+int  SelectmainMenu(void);            
 void SelectMainMenu(void);     
-void SelectSubMenu(int);
 void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
 void Process(void);
 void my_err(const char * err_string, int line);              //自己写的错误提示函数
-char *pas(char *s);             //登录时密码不回显
-int getch1(void);
 void registe();                //注册
-int login();                  //登录
+int login();                   //登录
 void forget_password();        //找回密码
+void function();               
+void function_menu();          //打印功能菜单
+void SelectfunctionMenu();     
+void SelectfunctionMenu_row();
+void SelectfunctionMenu_col();
 
 #endif
