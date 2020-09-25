@@ -53,10 +53,10 @@ int Account_Perst_MatchUserAndPassword(const char *name , const char *password);
 void Account_Perst_ChangePassword(const char *name, const char *password);         //修改密码
 void forget_password(pack *recv);                                                  //找回密码
 int recv1(int fd, char *buf, int len, int flags);                                  
-
-void add (node**Head, int fd_t, char *nam);                                        //单链表添加尾节点
-void fre (node *Head);                                                             //单链表free函数
-void delet ( node **Head, int fd_t );                                              //单链表删除节点函数
+void add(node**Head, int fd_t, char *nam);                                         //单链表添加尾节点
+void fre(node *Head);                                                              //单链表free函数
+void delet( node **Head, char *nam );                                              //注销用户（单链表删除）
 int search( node *Head, char *nam );                                               //查询用户是否在线
+void log_out(pack *recv);                                                          //注销登录
 
 #endif
