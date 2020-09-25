@@ -82,7 +82,9 @@ int login()
     if ( flag == 3 ) {
     
         mvprintw(14, 58, "******登录成功******");
-    
+        bzero(&user_name, sizeof(user_name));
+        strcpy(user_name, name);
+
     }
 
     else if ( flag == 0 ) {

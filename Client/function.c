@@ -53,6 +53,8 @@ void function_menu()
 void SelectfunctionMenu()
 {
 
+    row = col = 0;
+
     while ( 1 ) {
 
         KEY = getch();
@@ -85,6 +87,7 @@ void SelectfunctionMenu()
                 break;
             
             case 6:
+                log_out();
                 QuitProg();
                 return;
 

@@ -34,6 +34,7 @@
 extern int conn_fd;
 extern int ActSm;
 extern char *RegisteMenu[3];
+extern char user_name[30]; 
 
 
 int login_menu();              //登录界面主函数
@@ -53,5 +54,6 @@ void function_menu();          //打印功能菜单
 void SelectfunctionMenu();     
 void SelectfunctionMenu_row();
 void SelectfunctionMenu_col();
+void log_out();                //注销登录
 
 #endif
