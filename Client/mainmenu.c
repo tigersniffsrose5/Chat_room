@@ -4,9 +4,9 @@ int qsj = 1;            //登录菜单判断是否退出的标志
 int ActMm = 0;          //代表当前主菜单激活的号码
 int key = 0;            //用户从键盘输如的选择
 char *MainMenu[5] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
+pthread_t thid;
 
-
-int login_menu()
+int loginmenu()
 {
 
     setlocale(LC_ALL,"");
@@ -15,7 +15,7 @@ int login_menu()
     refresh();            
     curs_set(0);                                            //隐藏光标，0隐藏 1正常 2高亮显示
     DrawMain();                                             //在屏幕上画出主菜单
-    SelectmainMenu();                                           //对用户的操作进行相应的处理
+    SelectmainMenu();                                       //对用户的操作进行相应的处理
     
     return qsj;
 }
@@ -83,8 +83,22 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
                 return qsj;
 
             case 1:
-                if ( login() == 3 )
+                if ( login() == 3 ) {
+                    
+                    my_mutex = 0;
+                
+                    if (pthread_create(&thid, NULL, thread, NULL) != 0) {                                                                   
+                        myerr("pthread_create", __LINE__);
+                        exit(1);
+                    }
+
                     function();
+                
+                }
+
+                while ( my_mutex != 1 )           //等待工作线程结束;
+                    continue;
+                
                 clear();
                 DrawMain();
                 break;
@@ -94,7 +108,7 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
                 break;
             
             case 3:
-                forget_password();
+                forgetpassword();
                 break;
 
             case 4:

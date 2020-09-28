@@ -33,11 +33,11 @@
 
 extern int conn_fd;
 extern int ActSm;
+extern int my_mutex;
 extern char *RegisteMenu[3];
 extern char user_name[30]; 
 
-
-int login_menu();              //登录界面主函数
+int loginmenu();               //登录界面主函数
 void Initial(void);            //登录菜单启动函数
 void DrawMain(void);           //画登录菜单                  
 int  SelectmainMenu(void);            
@@ -45,15 +45,17 @@ void SelectMainMenu(void);
 void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
 void Process(void);
-void my_err(const char * err_string, int line);              //自己写的错误提示函数
+void myerr(const char * err_string, int line);              //自己写的错误提示函数
 void registe();                //注册
 int login();                   //登录
-void forget_password();        //找回密码
+void forgetpassword();         //找回密码
+void thread();
 void function();               
-void function_menu();          //打印功能菜单
+void functionmenu();           //打印功能菜单
 void SelectfunctionMenu();     
-void SelectfunctionMenu_row();
-void SelectfunctionMenu_col();
-void log_out();                //注销登录
+void SelectfunctionMenurow();
+void SelectfunctionMenucol();
+void logout();                 //注销登录
+void addfriend();              //添加好友
 
 #endif

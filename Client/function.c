@@ -7,6 +7,7 @@ char *Function_menu[2][3] = {
 int KEY = 0;
 int row = 0;     //行
 int col = 0;     //列
+int ans;
 int x = 9;        
 
 
@@ -17,16 +18,16 @@ void function()
     clear();
     refresh();
     curs_set(0);                                            //隐藏光标，0隐藏 1正常 2高亮显示
-    function_menu();                                             
+    functionmenu();                                             
     SelectfunctionMenu();                                           
 
 }
 
-void function_menu()
+void functionmenu()
 {
     char strArr[4][51];
 
-    Wind(stdscr, 3, 42, 34, 94);
+    Wind(stdscr, 3, 42, 34, 93);
 
     strcpy(strArr[0], "**************************************************");
     strcpy(strArr[1], "*                   Welcome to                   *");
@@ -60,16 +61,21 @@ void SelectfunctionMenu()
         KEY = getch();
 
         if ( KEY == KEY_UP || KEY == KEY_DOWN ) {
-            SelectfunctionMenu_row();
+            SelectfunctionMenurow();
         }
 
         else if ( KEY == KEY_LEFT || KEY == KEY_RIGHT ) {
-            SelectfunctionMenu_col();
+            SelectfunctionMenucol();
         }
 
         else if ( KEY == ENTER ) {
 
-            switch ( (row+1)*(col+1) ) { 
+            if ( row == 0 )
+                ans = 1+col;
+            else 
+                ans = 4+col;
+
+            switch ( ans ) { 
 
             case 1:
                 break;
@@ -81,13 +87,14 @@ void SelectfunctionMenu()
                 break;
 
             case 4:
+                addfriend();
                 break;
             
             case 5:
                 break;
             
             case 6:
-                log_out();
+                logout();
                 QuitProg();
                 return;
 
@@ -97,7 +104,7 @@ void SelectfunctionMenu()
 
 }
 
-void SelectfunctionMenu_row()
+void SelectfunctionMenurow()
 {
     mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);
     
@@ -115,7 +122,7 @@ void SelectfunctionMenu_row()
 
 }
 
-void SelectfunctionMenu_col()
+void SelectfunctionMenucol()
 {    
 
     mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);

@@ -46,7 +46,7 @@ int login()
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
-        my_err("send", __LINE__);
+        myerr("send", __LINE__);
     }
 
     cJSON_Delete(root);
@@ -58,7 +58,7 @@ int login()
         ret = 0;
 
         if ( (ret = recv(conn_fd, message+recv_len, MSG_LEN-recv_len, 0)) <= 0 ) {
-            my_err("recv", __LINE__);
+            myerr("recv", __LINE__);
         }
 
         recv_len += ret;
