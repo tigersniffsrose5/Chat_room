@@ -16,13 +16,13 @@ int main()
     sock_fd = socket(AF_INET, SOCK_STREAM, 0);
     
     if ( sock_fd < 0 ) {
-        my_err("socket", __LINE__);
+        myerr("socket", __LINE__);
     }
 
     optval = 1;
 
     if ( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval, sizeof(int)) < 0 ) {
-        my_err("setsockopt", __LINE__);
+        myerr("setsockopt", __LINE__);
     }
 
     ev.data.fd = sock_fd;
@@ -35,11 +35,11 @@ int main()
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     
     if ( bind(sock_fd, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in)) < 0 ) {
-        my_err("bind", __LINE__);
+        myerr("bind", __LINE__);
     }
 
     if ( listen(sock_fd, 20) < 0 ) {
-        my_err("listen", __LINE__);
+        myerr("listen", __LINE__);
     }
 
     len = sizeof(struct sockaddr_in);
@@ -74,7 +74,7 @@ int main()
                     if ( ret < 0 ) {
                         
                         close(events[i].data.fd);
-                        my_err("recv", __LINE__);
+                        myerr("recv", __LINE__);
                         break;
 
                     }
@@ -82,6 +82,7 @@ int main()
                     else if( ret == 0 ) {
 
                         flag = 0;
+                        delet1(&head, events[i].data.fd);
                         printf("客户端已关闭\n");
                         ev.data.fd = events[i].data.fd;
                         epoll_ctl(epfd, EPOLL_CTL_DEL, events[i].data.fd, &ev);
@@ -104,7 +105,7 @@ int main()
                 memcpy(p->json, &buf, sizeof(buf));
 
                 if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
-                    my_err("pthread_create", __LINE__); 
+                    myerr("pthread_create", __LINE__); 
                 } 
 
             }

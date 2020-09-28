@@ -38,25 +38,38 @@ typedef struct Node{
     struct Node *next;
 }node;
 
+typedef struct Downline_message{
+    char name[30];
+    char message[MSG_LEN];
+    struct Downline_message *next;
+}downline_message;
+
+
 extern int conn_fd, sock_fd;
 extern MYSQL *mysql;
 extern node *head;
+extern downline_message *head1;
 
-void my_err(const char * err_string, int line);
+
+void myerr(const char * err_string, int line);
 void mysql_init_t();
 void Thread(void *arg);                                                            //服务端工作线程
-int Account_Perst_IsUserName(const char *name);                                    //数据库检查是否重名 
+int Account_Perst_IsUserName(const char *name);                                    //数据库检查是否有此用户 
 void Account_Perst_AddUser(const char *name, int sex, const char *password);       //数据库添加新用户
 void registe(pack *recv);                                                          //注册
 void login(pack *recv);                                                            //登录
 int Account_Perst_MatchUserAndPassword(const char *name , const char *password);   //检查密码对错
 void Account_Perst_ChangePassword(const char *name, const char *password);         //修改密码
-void forget_password(pack *recv);                                                  //找回密码
+void forgetpassword(pack *recv);                                                  //找回密码
 int recv1(int fd, char *buf, int len, int flags);                                  
 void add(node**Head, int fd_t, char *nam);                                         //单链表添加尾节点
 void fre(node *Head);                                                              //单链表free函数
-void delet( node **Head, char *nam );                                              //注销用户（单链表删除）
-int search( node *Head, char *nam );                                               //查询用户是否在线
-void log_out(pack *recv);                                                          //注销登录
+void delet(node **Head, char *nam);                                                //注销用户（单链表删除）
+void delet1(node **Head, int fd_t);                                                //异常退出时将用户下线
+int search(node *Head, char *nam);                                                 //查询用户是否在线
+void logout(pack *recv);                                                           //注销登录
+void add_downline_message(downline_message **Head, const char *nam, const char *buf);
+void delet_downline_message(downline_message **Head, const char *nam);
+int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2);
 
 #endif

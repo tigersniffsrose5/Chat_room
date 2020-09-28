@@ -1,6 +1,6 @@
 #include "server.h"
 
-void add( node **Head, int fd_t, char *nam )
+void add(node **Head, int fd_t, const char *nam)
 {
     node *p = (node*)malloc(sizeof(node));
     node *last = *Head;
@@ -21,7 +21,7 @@ void add( node **Head, int fd_t, char *nam )
     }
 }
 
-void delet( node **Head, char *nam )
+void delet(node **Head, const char *nam)
 {
     node *p = *Head, *q;
 
@@ -39,7 +39,25 @@ void delet( node **Head, char *nam )
     }
 }   
 
-int search( node *Head, char *nam )
+void delet1(node **Head, int fd_t)
+{
+    node *p = *Head, *q;
+
+    for ( q = NULL ; p ; q = p, p = p->next ) {
+        if ( p->fd == fd_t ) {
+            if ( q ) {
+                q->next = p->next;
+            }
+            else {
+                *Head = p->next;
+            }
+            free(p);
+            break;
+        }
+    }
+}
+
+int search(node *Head, const char *nam)
 {
     node *p = Head, *q;
 
@@ -53,7 +71,7 @@ int search( node *Head, char *nam )
 }
 
 
-void fre( node *Head )
+void fre(node *Head)
 {
     node *p = Head, *q;
 

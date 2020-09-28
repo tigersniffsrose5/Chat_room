@@ -23,7 +23,7 @@ void login(pack *recv)
         char *out = cJSON_Print(root);
         
         if( send(recv->fd , out, MSG_LEN, 0) < 0){
-            my_err("send", __LINE__);
+            myerr("send", __LINE__);
         }
         
         cJSON_Delete(root);
@@ -40,7 +40,7 @@ void login(pack *recv)
         char *out = cJSON_Print(root);
         
         if( send(recv->fd , out, MSG_LEN, 0) < 0){
-            my_err("send", __LINE__);
+            myerr("send", __LINE__);
         }
         
         cJSON_Delete(root);
@@ -57,7 +57,7 @@ void login(pack *recv)
         char *out = cJSON_Print(root);
 
         if( send(recv->fd , out, MSG_LEN, 0) < 0){
-            my_err("send", __LINE__);
+            myerr("send", __LINE__);
         }
 
         cJSON_Delete(root);
@@ -74,7 +74,7 @@ void login(pack *recv)
     char *out = cJSON_Print(root);
 
     if( send(recv->fd , out, MSG_LEN, 0) < 0){
-        my_err("send", __LINE__);
+        myerr("send", __LINE__);
     }
 
     cJSON_Delete(root);
