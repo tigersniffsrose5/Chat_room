@@ -18,7 +18,7 @@ void logout(pack *recv)
     cJSON_AddItemToObject(root , "type" , item);
     char *out = cJSON_Print(root);
 
-    if( send(recv->fd , out, MSG_LEN, 0) < 0){
+    if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
 

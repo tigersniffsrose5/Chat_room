@@ -38,7 +38,7 @@ void forgetpassword(pack *recv)
 
         char *out = cJSON_Print(root);
 
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
 
@@ -56,7 +56,7 @@ void forgetpassword(pack *recv)
 
         char *out = cJSON_Print(root);
 
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
 
@@ -71,7 +71,7 @@ void forgetpassword(pack *recv)
     cJSON_AddItemToObject(root , "res" , item);
     char *out = cJSON_Print(root);
 
-    if( send(recv->fd , out, MSG_LEN, 0) < 0){
+    if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
 

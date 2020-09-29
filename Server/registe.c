@@ -36,6 +36,7 @@ void registe(pack *recv)
     }
 
     Account_Perst_AddUser(name, sex, password);
+    uid = Account_Perst_IsUserName(name); 
 
     item = cJSON_CreateBool(1);
     cJSON_AddItemToObject(root, "res", item);
@@ -43,7 +44,7 @@ void registe(pack *recv)
     cJSON_AddItemToObject(root, "uid", item);
     char *out = cJSON_Print(root);
 
-    if( send(recv->fd, out, MSG_LEN, 0) < 0){
+    if( send(recv->fd, out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
 
@@ -62,7 +63,7 @@ int Account_Perst_IsUserName(const char *name)
     
     sprintf(SQL,"SELECT uid FROM user_info  WHERE name = '%s'",name);
     
-    if( mysql_real_query(mysql , SQL , strlen(SQL)) ){
+    if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
 
         printf("mysql_real_query select failure!\n"); 
         exit(0);  

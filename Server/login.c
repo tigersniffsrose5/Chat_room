@@ -22,7 +22,7 @@ void login(pack *recv)
         cJSON_AddItemToObject(root , "res" , item);
         char *out = cJSON_Print(root);
         
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
         
@@ -39,7 +39,7 @@ void login(pack *recv)
         cJSON_AddItemToObject(root , "res" , item);
         char *out = cJSON_Print(root);
         
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
         
@@ -56,7 +56,7 @@ void login(pack *recv)
         cJSON_AddItemToObject(root , "res" , item);
         char *out = cJSON_Print(root);
 
-        if( send(recv->fd , out, MSG_LEN, 0) < 0){
+        if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
 
@@ -73,7 +73,7 @@ void login(pack *recv)
     cJSON_AddItemToObject(root , "res" , item);
     char *out = cJSON_Print(root);
 
-    if( send(recv->fd , out, MSG_LEN, 0) < 0){
+    if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
 
@@ -91,7 +91,7 @@ int Account_Perst_MatchUserAndPassword(const char *name , const char *password)
 
     sprintf(SQL, "SELECT * FROM user_info WHERE (name = '%s' AND password = md5('%s'))", name, password);
 
-    if(mysql_real_query(mysql , SQL ,strlen(SQL))){
+    if( mysql_real_query(mysql , SQL ,strlen(SQL)) ) {
         printf("mysql_real_query select failure!\n"); 
         exit(0);
     }

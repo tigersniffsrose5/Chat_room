@@ -26,7 +26,7 @@ void addfriend(pack *recv)
             cJSON_AddItemToObject(root , "res" , item);
             char *out = cJSON_Print(root);
 
-            if( send(recv->fd , out, MSG_LEN, 0) < 0){
+            if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
                 myerr("send", __LINE__);
             }
 
@@ -41,7 +41,7 @@ void addfriend(pack *recv)
             cJSON_AddItemToObject(root , "res" , item);
             char *out = cJSON_Print(root);
 
-            if( send(recv->fd , out, MSG_LEN, 0) < 0){
+            if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
                 myerr("send", __LINE__);
             }
 
@@ -53,14 +53,14 @@ void addfriend(pack *recv)
 
         fd = search(head, name2);
         
-        item = cJSON_CreateNumber(2);
+        item = cJSON_CreateNumber(3);
         cJSON_AddItemToObject(root , "res" , item);
         item = cJSON_CreateString(name1);
         cJSON_AddItemToObject(root , "name" , item);
         char *out = cJSON_Print(root);
 
         if ( fd != 0 ) {
-            if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
+            if( send(fd , out, MSG_LEN, 0) < 0 ) {
                 myerr("send", __LINE__);
             }
         }
@@ -82,8 +82,36 @@ void addfriend(pack *recv)
         root = cJSON_CreateObject();
         item = cJSON_CreateNumber(1);
         cJSON_AddItemToObject(root , "type" , item);
-        
-        if (  )
+        item = cJSON_CreateString(name1);
+        cJSON_AddItemToObject(root , "name" , item);
+
+        if ( ans == 1 ) {
+            Account_Perst_AddFriend(name1, name2);
+            item = cJSON_CreateNumber(4);
+            cJSON_AddItemToObject(root , "res" , item);
+        }
+
+        else {
+            item = cJSON_CreateNumber(5);
+            cJSON_AddItemToObject(root , "res" , item);
+        }
+
+        char *out = cJSON_Print(root);
+
+        fd = search(head, name2);
+        if ( fd != 0 ) {
+            if( send(fd , out, MSG_LEN, 0) < 0 ) {
+                myerr("send", __LINE__);
+            }
+        }
+
+        else {
+            add_downline_message(&head1, name2, out); 
+        }
+
+        cJSON_Delete(root);
+        free(out);
+
     }
 
 }
@@ -95,9 +123,9 @@ int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2)
     MYSQL_ROW row;
     int rtn;
 
-    sprintf(SQL, "SELECT * FROM friend_relationship WHERE (name1 = '%s' AND name2 = '%s')", name1, name2);
+    sprintf(SQL, "SELECT * FROM friend_relationship WHERE (user_name1 = '%s' AND user_name2 = '%s')", name1, name2);
 
-    if(mysql_real_query(mysql , SQL ,strlen(SQL))){
+    if( mysql_real_query(mysql , SQL ,strlen(SQL)) ) {
         printf("mysql_real_query select failure!\n"); 
         exit(0);
     }
@@ -117,5 +145,20 @@ int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2)
 
     mysql_free_result(res);
     return rtn;
+
+}
+
+void Account_Perst_AddFriend(const char *name1, const char *name2)
+{
+    char SQL[100];
+
+    sprintf(SQL,"INSERT INTO friend_relationship VALUES ('%s', '%s',)", name1, name2);
+
+    if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
+
+        printf("mysql_real_query insert failure!\n");
+        exit(0);
+
+    }
 
 }
