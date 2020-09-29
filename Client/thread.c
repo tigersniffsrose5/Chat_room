@@ -23,11 +23,14 @@ void thread()
         root = cJSON_Parse(message);
         item = cJSON_GetObjectItem(root ,"type");
 
-        switch ( item->valuestring[0] ) {
+        switch ( item->valueint ) {
             case 0:
                 my_mutex = 1;
                 return;
             case 1:
+                my_function = 0;
+                add_friend(message);
+                my_function = 1;
                 break;
         }
 

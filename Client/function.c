@@ -58,6 +58,9 @@ void SelectfunctionMenu()
 
     while ( 1 ) {
 
+        if ( my_function == 0 )
+            continue;
+
         KEY = getch();
 
         if ( KEY == KEY_UP || KEY == KEY_DOWN ) {

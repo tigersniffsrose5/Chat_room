@@ -86,23 +86,23 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
                 if ( login() == 3 ) {
                     
                     my_mutex = 0;
-                
+
                     if (pthread_create(&thid, NULL, thread, NULL) != 0) {                                                                   
                         myerr("pthread_create", __LINE__);
                         exit(1);
                     }
 
                     function();
-                
+
+                    while ( my_mutex != 1 )           //等待工作线程结束;
+                        continue;
+
                 }
 
-                while ( my_mutex != 1 )           //等待工作线程结束;
-                    continue;
-                
                 clear();
                 DrawMain();
                 break;
-            
+
             case 2:
                 registe();
                 break;

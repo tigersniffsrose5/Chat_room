@@ -137,7 +137,9 @@ void registe()
 
     if ( flag == 1 ) {
         mvprintw(12, 58, "******注册成功******");
-        mvprintw(16,58,"*这是你的验证码： %d*", id);
+        mvprintw(16, 58, "***这是你的验证码***");
+        move(17, 67);
+        printw("%d", id);
     }
 
     else {

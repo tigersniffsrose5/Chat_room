@@ -34,6 +34,7 @@
 extern int conn_fd;
 extern int ActSm;
 extern int my_mutex;
+extern int my_function;
 extern char *RegisteMenu[3];
 extern char user_name[30]; 
 
@@ -57,5 +58,6 @@ void SelectfunctionMenurow();
 void SelectfunctionMenucol();
 void logout();                 //注销登录
 void addfriend();              //添加好友
+void add_friend(const char *message);     
 
 #endif
