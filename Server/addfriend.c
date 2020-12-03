@@ -65,11 +65,11 @@ void addfriend(pack *recv)
                 myerr("send", __LINE__);
             }
         }
-
-        else {
-           add_downline_message(&downline_message_t, name2, out); 
-        }
-
+//
+//        else {
+//           add_downline_message(&downline_message_t, name2, out); 
+//        }
+//
         cJSON_Delete(root);
         free(out);
     }
@@ -105,11 +105,11 @@ void addfriend(pack *recv)
                 myerr("send", __LINE__);
             }
         }
-
-        else {
-            add_downline_message(&downline_message_t, name2, out); 
-        }
-
+//
+//        else {
+//            add_downline_message(&downline_message_t, name2, out); 
+//        }
+//
         cJSON_Delete(root);
         free(out);
 
@@ -153,7 +153,7 @@ void Account_Perst_AddFriend(const char *name1, const char *name2)
 {
     char SQL[100];
 
-    sprintf(SQL,"INSERT INTO friend_relationship VALUES ('%s', '%s',)", name1, name2);
+    sprintf(SQL,"INSERT INTO friend_relationship VALUES ('%s', '%s')", name1, name2);
 
     if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
 
