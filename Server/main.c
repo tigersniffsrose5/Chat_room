@@ -82,7 +82,7 @@ int main()
                     else if( ret == 0 ) {
 
                         flag = 0;
-                        delet1(&head, events[i].data.fd);
+                        delet1(&node_t, events[i].data.fd);
                         printf("客户端已关闭\n");
                         ev.data.fd = events[i].data.fd;
                         epoll_ctl(epfd, EPOLL_CTL_DEL, events[i].data.fd, &ev);

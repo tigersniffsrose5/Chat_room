@@ -7,11 +7,11 @@ void forgetpassword(pack *recv)
     cJSON *root, *item;
 
     root = cJSON_Parse(recv->json);
-    item = cJSON_GetObjectItem(root , "name");
+    item = cJSON_GetObjectItem(root, "name");
     strcpy(name,item->valuestring);
-    item = cJSON_GetObjectItem(root , "code");
+    item = cJSON_GetObjectItem(root, "code");
     code = item->valueint;
-    item = cJSON_GetObjectItem(root , "flag");
+    item = cJSON_GetObjectItem(root, "flag");
     flag = item->valueint;
 
     if ( flag == 4 ) {
@@ -34,7 +34,7 @@ void forgetpassword(pack *recv)
     if ( uid == 0 ) {
 
         item = cJSON_CreateNumber(1);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
 
         char *out = cJSON_Print(root);
 
@@ -52,7 +52,7 @@ void forgetpassword(pack *recv)
     if ( uid != code ) {
 
         item = cJSON_CreateNumber(2);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
 
         char *out = cJSON_Print(root);
 
@@ -68,7 +68,7 @@ void forgetpassword(pack *recv)
     }
 
     item = cJSON_CreateNumber(3);
-    cJSON_AddItemToObject(root , "res" , item);
+    cJSON_AddItemToObject(root, "res", item);
     char *out = cJSON_Print(root);
 
     if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {

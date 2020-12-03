@@ -6,19 +6,19 @@ void logout(pack *recv)
     cJSON *root, *item;
 
     root = cJSON_Parse(recv->json);
-    item = cJSON_GetObjectItem(root , "name");
+    item = cJSON_GetObjectItem(root, "name");
     strcpy(name,item->valuestring);
 
     cJSON_Delete(root);
     
-    delet(&head, name);
+    delet(&node_t, name);
 
     root = cJSON_CreateObject();
     item = cJSON_CreateNumber(0);
-    cJSON_AddItemToObject(root , "type" , item);
+    cJSON_AddItemToObject(root, "type", item);
     char *out = cJSON_Print(root);
 
-    if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
+    if( send(recv->fd, out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
 

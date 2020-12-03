@@ -2,7 +2,7 @@
 
 void add(node **Head, int fd_t, const char *nam)
 {
-    node *p = (node*)malloc(sizeof(node));
+    node *p = (node *)malloc(sizeof(node));
     node *last = *Head;
 
     p->fd = fd_t;

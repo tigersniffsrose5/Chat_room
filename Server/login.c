@@ -19,7 +19,7 @@ void login(pack *recv)
     if ( uid == 0 ) {
         
         item = cJSON_CreateNumber(0);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
         char *out = cJSON_Print(root);
         
         if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
@@ -36,7 +36,7 @@ void login(pack *recv)
     if ( Account_Perst_MatchUserAndPassword(name ,password) == 0 ) {
  
         item = cJSON_CreateNumber(1);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
         char *out = cJSON_Print(root);
         
         if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
@@ -50,10 +50,10 @@ void login(pack *recv)
 
     }
 
-    if ( search(head, name) ) {
+    if ( search(node_t, name) ) {
         
         item = cJSON_CreateNumber(2);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
         char *out = cJSON_Print(root);
 
         if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
@@ -67,7 +67,7 @@ void login(pack *recv)
 
     }
 
-    add(&head, recv->fd, name);
+    add(&node_t, recv->fd, name);
 
     item = cJSON_CreateNumber(3);
     cJSON_AddItemToObject(root , "res" , item);

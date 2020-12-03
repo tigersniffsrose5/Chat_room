@@ -2,7 +2,7 @@
 
 void add_downline_message(downline_message **Head, const char *nam, const char *buf)
 {
-    downline_message *p = (downline_message*)malloc(sizeof(downline_message));
+    downline_message *p = (downline_message *)malloc(sizeof(downline_message));
     downline_message *last = *Head;
 
     strcpy(p->name, nam);

@@ -7,11 +7,11 @@ void registe(pack *recv)
     cJSON *root, *item;
 
     root = cJSON_Parse(recv->json);
-    item = cJSON_GetObjectItem(root , "name");
+    item = cJSON_GetObjectItem(root, "name");
     strcpy(name,item->valuestring);
-    item = cJSON_GetObjectItem(root ,"sex");
+    item = cJSON_GetObjectItem(root, "sex");
     sex = item->valueint;
-    item = cJSON_GetObjectItem(root , "password");
+    item = cJSON_GetObjectItem(root, "password");
     strcpy(password , item->valuestring);
     cJSON_Delete(root);
 
@@ -21,10 +21,10 @@ void registe(pack *recv)
     if ( uid ) {
         
         item = cJSON_CreateBool(0);
-        cJSON_AddItemToObject(root , "res" , item);
+        cJSON_AddItemToObject(root, "res", item);
         char *out = cJSON_Print(root);
         
-        if ( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
+        if ( send(recv->fd, out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
         }
         

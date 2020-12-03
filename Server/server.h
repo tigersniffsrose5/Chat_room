@@ -27,7 +27,7 @@
 #define PORT 1212
 #define MSG_LEN 1024
 
-typedef struct {
+typedef struct Pack{
     int fd;
     char json[MSG_LEN];
 }pack;
@@ -47,8 +47,8 @@ typedef struct Downline_message{
 
 extern int conn_fd, sock_fd;
 extern MYSQL *mysql;
-extern node *head;
-extern downline_message *head1;
+extern node *node_t;
+extern downline_message *downline_message_t;
 
 
 void myerr(const char * err_string, int line);

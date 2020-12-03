@@ -2,5 +2,5 @@
 
 int conn_fd, sock_fd;
 MYSQL *mysql;
-node *head;
-downline_message *head1;
+node *node_t;
+downline_message *downline_message_t;
