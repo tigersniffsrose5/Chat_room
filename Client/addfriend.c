@@ -21,18 +21,18 @@ void addfriend()
     keypad(stdscr, FALSE);
     
     mvprintw(13, 58, "*请输入待添加的好友名*");
-    move(14,66);
+    move(15,66);
     scanw("%s", name);    
 
     while ( strcmp(name, user_name) == 0 ) {
 
-        move(14,66);
+        move(15,66);
         clrtoeol();         //清除输入行的内容
 
         mvprintw(13, 58, "**不能添加自己请重输**");
-        mvprintw(14, 87, "|");
+        mvprintw(15, 87, "|");
         wrefresh(aboutWin);
-        move(14,66);
+        move(15,66);
         scanw("%s", name);    
 
     }
@@ -94,14 +94,14 @@ void add_friend(const char *message)
     res = item->valueint;
     item = cJSON_GetObjectItem(root, "friend_name");
     strcpy(friend_name, item->valuestring);
-
+    
     cJSON_Delete(root);
 
     if ( res == 3 ) {
 
         keypad(stdscr, TRUE);
         mvaddstr(13, 58, "*此用户想添加你为好友*");
-        mvaddstr(14, 66, friend_name);
+        mvaddstr(15, 66, friend_name);
         mvaddstr(17, 58, "*******是否同意*******");
         attron(A_REVERSE);
         mvaddstr(18, 64, Res[0]);
@@ -112,12 +112,12 @@ void add_friend(const char *message)
 
         while ( 1 ) {
 
-            mvprintw(19, 87, "|");
-            key = wgetch(aboutWin);
+            mvprintw(18, 87, "|");
+            key = getch();
             
             if ( key == KEY_LEFT || key == KEY_RIGHT ) {
 
-                mvaddstr(19, 8+n*6, Res[n]);
+                mvaddstr(18, 64+n*6, Res[n]);
 
                 if ( key == KEY_LEFT ) {
                     n = n == 0 ? 1 : 0;
@@ -128,7 +128,7 @@ void add_friend(const char *message)
                 }
 
                 attron(A_REVERSE);
-                mvaddstr(6, 8+n*6, Res[n]);
+                mvaddstr(18, 64+n*6, Res[n]);
                 attroff(A_REVERSE);
             
             }
@@ -173,7 +173,7 @@ void add_friend(const char *message)
     else if ( res == 1 ) {
 
         mvaddstr(13, 58, "*****此用户不存在*****");
-        mvaddstr(14, 66, friend_name);
+        mvaddstr(15, 66, friend_name);
         mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
@@ -182,7 +182,7 @@ void add_friend(const char *message)
     else if ( res == 2 ) {
 
         mvaddstr(13, 58, "*此用户已经是你的好友*");
-        mvaddstr(14, 66, friend_name);
+        mvaddstr(15, 66, friend_name);
         mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
@@ -191,7 +191,7 @@ void add_friend(const char *message)
     else if ( res == 4 ) {
 
         mvaddstr(13, 58, "*此用户同意了你的请求*");
-        mvaddstr(14, 66, friend_name);
+        mvaddstr(15, 66, friend_name);
         mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
@@ -200,7 +200,7 @@ void add_friend(const char *message)
     else if ( res == 5 ) {
 
         mvaddstr(13, 58, "*此用户拒绝了你的请求*");
-        mvaddstr(14, 66, friend_name);
+        mvaddstr(15, 66, friend_name);
         mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
