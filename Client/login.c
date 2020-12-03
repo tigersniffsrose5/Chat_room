@@ -20,8 +20,7 @@ int login()
 
     echo();
     curs_set(1);
-    keypad(stdscr, FALSE);
-
+    
     mvprintw(12, 58, RegisteMenu[0]);
     move(13,65);
     scanw("%s", name);
@@ -31,7 +30,6 @@ int login()
     scanw("%s", password);
     
     curs_set(0);
-    keypad(stdscr, TRUE);
     
     mvprintw(20,58,RegisteMenu[2]);
     getch();
@@ -40,9 +38,9 @@ int login()
     item = cJSON_CreateNumber(1);
     cJSON_AddItemToObject(root, "type", item);
     item = cJSON_CreateString(name);
-    cJSON_AddItemToObject(root,"name",item);
+    cJSON_AddItemToObject(root, "name", item);
     item = cJSON_CreateString(password);
-    cJSON_AddItemToObject(root,"password",item);
+    cJSON_AddItemToObject(root, "password", item);
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {

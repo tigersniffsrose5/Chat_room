@@ -23,7 +23,6 @@ void registe()
 
     echo();
     curs_set(1);
-    keypad(stdscr, FALSE);
 
     mvprintw(10, 58, RegisteMenu[0]);
     move(11,65);
@@ -34,7 +33,6 @@ void registe()
     
     noecho();
     curs_set(0);
-    keypad(stdscr, TRUE);
 
     mvprintw(18, 58, "*****请选择性别*****");
     attron(A_REVERSE);
@@ -49,9 +47,9 @@ void registe()
         key = getch();
 
         if ( key == KEY_LEFT || key == KEY_RIGHT ) {
-            
+
             mvaddstr(19, 64+n*6, Sex[n]);
-            
+
             if ( key == KEY_LEFT ) {
                 n = n == 0 ? 1 : 0;
             }
@@ -61,7 +59,7 @@ void registe()
             }
 
             attron(A_REVERSE);
-            mvaddstr(19,64+n*6,Sex[n]);
+            mvaddstr(19, 64+n*6, Sex[n]);
             attroff(A_REVERSE);
 
         }
@@ -88,11 +86,11 @@ void registe()
     item = cJSON_CreateNumber(0);
     cJSON_AddItemToObject(root, "type", item);
     item = cJSON_CreateString(name);
-    cJSON_AddItemToObject(root,"name",item);
+    cJSON_AddItemToObject(root, "name", item);
     item = cJSON_CreateBool(sex);
-    cJSON_AddItemToObject(root ,"sex" ,item);
+    cJSON_AddItemToObject(root, "sex", item);
     item = cJSON_CreateString(password);
-    cJSON_AddItemToObject(root,"password",item);
+    cJSON_AddItemToObject(root, "password", item);
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {

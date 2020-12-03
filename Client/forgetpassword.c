@@ -20,7 +20,6 @@ void forgetpassword()
 
     echo();
     curs_set(1);
-    keypad(stdscr, FALSE);
 
     mvprintw(12, 58, RegisteMenu[0]);
     move(13,65);
@@ -31,7 +30,6 @@ void forgetpassword()
 
     noecho();
     curs_set(0);
-    keypad(stdscr, TRUE);
     
     mvprintw(20,58,RegisteMenu[2]);
     getch();
@@ -40,11 +38,11 @@ void forgetpassword()
     item = cJSON_CreateNumber(2);
     cJSON_AddItemToObject(root, "type", item);
     item = cJSON_CreateString(name);
-    cJSON_AddItemToObject(root,"name",item);
+    cJSON_AddItemToObject(root, "name", item);
     item = cJSON_CreateNumber(code);
-    cJSON_AddItemToObject(root,"code",item);
+    cJSON_AddItemToObject(root, "code", item);
     item = cJSON_CreateNumber(flag);
-    cJSON_AddItemToObject(root,"flag",item);
+    cJSON_AddItemToObject(root, "flag", item);
     char *out = cJSON_Print(root);
 
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
@@ -103,13 +101,13 @@ void forgetpassword()
         item = cJSON_CreateNumber(2);
         cJSON_AddItemToObject(root, "type", item);
         item = cJSON_CreateString(name);
-        cJSON_AddItemToObject(root,"name",item);
+        cJSON_AddItemToObject(root, "name", item);
         item = cJSON_CreateNumber(code);
-        cJSON_AddItemToObject(root,"code",item);
+        cJSON_AddItemToObject(root, "code", item);
         item = cJSON_CreateNumber(flag);
-        cJSON_AddItemToObject(root,"flag",item);
+        cJSON_AddItemToObject(root, "flag", item);
         item = cJSON_CreateString(password);
-        cJSON_AddItemToObject(root,"password",item);
+        cJSON_AddItemToObject(root, "password", item);
         char *out = cJSON_Print(root);
         
         if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {

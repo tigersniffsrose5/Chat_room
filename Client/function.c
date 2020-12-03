@@ -8,12 +8,9 @@ int KEY = 0;
 int row = 0;     //行
 int col = 0;     //列
 int ans;
-int x = 9;        
-
 
 void function()
 {
-    setlocale(LC_ALL,"");
     Initial();                                              //初始化函数
     clear();
     refresh();
@@ -26,6 +23,8 @@ void function()
 void functionmenu()
 {
     char strArr[4][51];
+
+    bSubOpen = 1;
 
     Wind(stdscr, 3, 42, 34, 93);
 
@@ -41,25 +40,21 @@ void functionmenu()
 
     for ( int i = 0; i < 2; i++ ) {
         for ( int j = 0; j < 3; j++ ) {
-            mvaddstr(x+2*i+1, 47+j*16, Function_menu[i][j]);
+            mvaddstr(10+2*i, 47+j*16, Function_menu[i][j]);
         }
     }
 
     attron(A_REVERSE);  
-    mvaddstr(x+1,47,Function_menu[0][0]);  
+    mvaddstr(10+2*row, 47+col*16, Function_menu[row][col]);
     attroff(A_REVERSE);
 
+    mvaddstr(15, 15+LeftCol, strArr[3]);
 }
 
 void SelectfunctionMenu()
 {
 
-    row = col = 0;
-
     while ( 1 ) {
-
-        if ( my_function == 0 )
-            continue;
 
         KEY = getch();
 
@@ -87,6 +82,7 @@ void SelectfunctionMenu()
                 break;
 
             case 3:
+                dealapply();
                 break;
 
             case 4:
@@ -98,7 +94,7 @@ void SelectfunctionMenu()
             
             case 6:
                 logout();
-                QuitProg();
+                row = col = 0;
                 return;
 
             }
@@ -109,7 +105,7 @@ void SelectfunctionMenu()
 
 void SelectfunctionMenurow()
 {
-    mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);
+    mvaddstr(10+2*row, 47+col*16, Function_menu[row][col]);
     
     if ( KEY == KEY_UP ) {
         row = row == 0 ? 1 : 0;
@@ -120,7 +116,7 @@ void SelectfunctionMenurow()
     }
 
     attron(A_REVERSE);  
-    mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);
+    mvaddstr(10+2*row, 47+col*16, Function_menu[row][col]);
     attroff(A_REVERSE);
 
 }
@@ -128,7 +124,7 @@ void SelectfunctionMenurow()
 void SelectfunctionMenucol()
 {    
 
-    mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);
+    mvaddstr(10+2*row, 47+col*16, Function_menu[row][col]);
 
     if ( KEY == KEY_LEFT ) {
         col = col == 0 ? col+2 : col-1;
@@ -139,8 +135,7 @@ void SelectfunctionMenucol()
     }
 
     attron(A_REVERSE);  
-    mvaddstr(x+2*row+1, 47+col*16, Function_menu[row][col]);
+    mvaddstr(10+2*row, 47+col*16, Function_menu[row][col]);
     attroff(A_REVERSE);
 
 }
-

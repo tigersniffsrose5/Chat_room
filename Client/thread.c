@@ -1,6 +1,6 @@
 #include "client.h"
 
-void thread()
+void Thread()
 {
     int ret, recv_len;
     char message[MSG_LEN];
@@ -20,17 +20,17 @@ void thread()
             recv_len += ret;
 
         }
-        root = cJSON_Parse(message);
-        item = cJSON_GetObjectItem(root ,"type");
 
+        root = cJSON_Parse(message);
+        item = cJSON_GetObjectItem(root, "type");
+        
         switch ( item->valueint ) {
             case 0:
                 my_mutex = 1;
+                cJSON_Delete(root);
                 return;
             case 1:
-                my_function = 0;
-                add_friend(message);
-                my_function = 1;
+                add(&friend_request, message);
                 break;
         }
 

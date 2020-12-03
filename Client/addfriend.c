@@ -8,47 +8,42 @@ void addfriend()
     cJSON *root;
     cJSON *item;
 
-    aboutWin = newwin(8, 24, 15, 95);
-    Wind(aboutWin, 0, 0, 7, 23);
+    clear();
+    touchwin(stdscr);                    //激活stdrc窗口
+    wrefresh(stdscr);                    //将窗口显示出来
+    aboutWin = newwin(16, 40, 8, 48);
+    Wind(aboutWin, 0, 0, 15, 39);
     touchwin(aboutWin);                
     wrefresh(aboutWin);
 
     echo();
     curs_set(1);
     keypad(stdscr, FALSE);
-
-    mvwaddstr(aboutWin, 2, 1, "*请输入待添加的好友名*");
-    wrefresh(aboutWin);
-    move(18,105);
-    scanw("%s", name);
+    
+    mvprintw(13, 58, "*请输入待添加的好友名*");
+    move(14,66);
+    scanw("%s", name);    
 
     while ( strcmp(name, user_name) == 0 ) {
 
-        move(18,105);
+        move(14,66);
         clrtoeol();         //清除输入行的内容
 
-        mvwaddstr(aboutWin, 2, 1, "**不能添加自己请重输**");
+        mvprintw(13, 58, "**不能添加自己请重输**");
+        mvprintw(14, 87, "|");
         wrefresh(aboutWin);
-        move(18,105);
-        scanw("%s", name);
+        move(14,66);
+        scanw("%s", name);    
 
     }
 
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
-
-    mvwprintw(aboutWin, 5, 1,"*****按任意键继续*****");
+    
+    mvprintw(17, 58,"*****按任意键继续*****");
     wrefresh(aboutWin);
     getch();
-
-    delwin(aboutWin);
-
-    move(18,105);
-    clrtoeol();         //清除输入行的内容
-
-    touchwin(stdscr);                
-    wrefresh(stdscr);
 
     root = cJSON_CreateObject();
     item = cJSON_CreateNumber(4);
@@ -68,6 +63,10 @@ void addfriend()
     cJSON_Delete(root);
     free(out);
 
+    delwin(aboutWin);
+    clear();
+    functionmenu();
+
 }
 
 
@@ -75,47 +74,50 @@ void add_friend(const char *message)
 {
     WINDOW *aboutWin;
     int res, n = 0, key, ans;
-    char name[30], Res[2][4] = {"是", "否"};
+    char friend_name[30], Res[2][4] = {"是", "否"};
 
-    aboutWin = newwin(8, 24, 15, 95);
-    Wind(aboutWin, 0, 0, 7, 23);
+    clear();
+    touchwin(stdscr);                    //激活stdrc窗口
+    wrefresh(stdscr);                    //将窗口显示出来
+    aboutWin = newwin(16, 40, 8, 48);
+    Wind(aboutWin, 0, 0, 15, 39);
     touchwin(aboutWin);                
     wrefresh(aboutWin);
 
+    noecho();
+    curs_set(0);
+
+    bSubOpen = 0;                        //没在主函数界面，切换标志位 
+
     cJSON *root = cJSON_Parse(message);
-    cJSON *item = cJSON_GetObjectItem(root ,"res");
+    cJSON *item = cJSON_GetObjectItem(root, "res");
     res = item->valueint;
-    
-    if ( res >= 3 ) {
-    
-        cJSON *item = cJSON_GetObjectItem(root ,"name");
-        strcpy(name, item->valuestring);
-    
-    }
+    item = cJSON_GetObjectItem(root, "friend_name");
+    strcpy(friend_name, item->valuestring);
+
+    cJSON_Delete(root);
 
     if ( res == 3 ) {
 
-        mvwaddstr(aboutWin, 2, 1, "*此用户想添加你为好友*");
-        wrefresh(aboutWin);
-        mvwaddstr(aboutWin, 3, 10, name);
+        keypad(stdscr, TRUE);
+        mvaddstr(13, 58, "*此用户想添加你为好友*");
+        mvaddstr(14, 66, friend_name);
+        mvaddstr(17, 58, "*******是否同意*******");
+        attron(A_REVERSE);
+        mvaddstr(18, 64, Res[0]);
+        attroff(A_REVERSE);
+        mvaddstr(18, 67, "||");
+        mvaddstr(18, 70, Res[1]);
         wrefresh(aboutWin);
 
-        mvwaddstr(aboutWin, 5, 1, "*******是否同意*******");
-        attron(A_REVERSE);
-        mvwaddstr(aboutWin, 6, 8, Res[0]);
-        attroff(A_REVERSE);
-        mvwaddstr(aboutWin, 6, 11, "||");
-        mvwaddstr(aboutWin, 6, 14, Res[1]);
-        wrefresh(aboutWin);
-        
         while ( 1 ) {
 
-            key = getch();
-
+            mvprintw(19, 87, "|");
+            key = wgetch(aboutWin);
+            
             if ( key == KEY_LEFT || key == KEY_RIGHT ) {
 
-                mvwaddstr(aboutWin, 6, 8+n*6, Res[n]);
-                wrefresh(aboutWin);
+                mvaddstr(19, 8+n*6, Res[n]);
 
                 if ( key == KEY_LEFT ) {
                     n = n == 0 ? 1 : 0;
@@ -126,9 +128,8 @@ void add_friend(const char *message)
                 }
 
                 attron(A_REVERSE);
-                mvwaddstr(aboutWin, 6, 8+n*6, Res[n]);
+                mvaddstr(6, 8+n*6, Res[n]);
                 attroff(A_REVERSE);
-                wrefresh(aboutWin);
             
             }
 
@@ -151,9 +152,9 @@ void add_friend(const char *message)
         item = cJSON_CreateNumber(4);
         cJSON_AddItemToObject(root, "type", item);
         item = cJSON_CreateString(user_name);
-        cJSON_AddItemToObject(root,"user_name",item);
-        item = cJSON_CreateString(name);
-        cJSON_AddItemToObject(root,"friend_name",item);
+        cJSON_AddItemToObject(root, "user_name", item);
+        item = cJSON_CreateString(friend_name);
+        cJSON_AddItemToObject(root, "friend_name", item);
         item = cJSON_CreateNumber(2);
         cJSON_AddItemToObject(root, "flag", item);
         item = cJSON_CreateNumber(ans);
@@ -166,49 +167,45 @@ void add_friend(const char *message)
 
         cJSON_Delete(root);
         free(out);
+    
     }
 
     else if ( res == 1 ) {
 
-        mvwaddstr(aboutWin, 2, 1, "*****此用户不存在*****");
-        mvwprintw(aboutWin, 5, 1, "*****按任意键继续*****");
-        wrefresh(aboutWin);
+        mvaddstr(13, 58, "*****此用户不存在*****");
+        mvaddstr(14, 66, friend_name);
+        mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
     }
 
     else if ( res == 2 ) {
 
-        mvwaddstr(aboutWin, 2, 1, "*此用户已经是你的好友*");
-        mvwprintw(aboutWin, 5, 1, "*****按任意键继续*****");
-        wrefresh(aboutWin);
-        getch();    
+        mvaddstr(13, 58, "*此用户已经是你的好友*");
+        mvaddstr(14, 66, friend_name);
+        mvprintw(17, 58, "*****按任意键继续*****");
+        getch();
 
     }
 
     else if ( res == 4 ) {
 
-        mvwaddstr(aboutWin, 2, 1, "*此用户同意了你的请求*");
-        mvwaddstr(aboutWin, 3, 10, name);
-        mvwprintw(aboutWin, 5, 1, "*****按任意键继续*****");
-        wrefresh(aboutWin);
+        mvaddstr(13, 58, "*此用户同意了你的请求*");
+        mvaddstr(14, 66, friend_name);
+        mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
     }
 
     else if ( res == 5 ) {
 
-        mvwaddstr(aboutWin, 2, 1, "*此用户拒绝了你的请求*");
-        mvwaddstr(aboutWin, 3, 10, name);
-        mvwprintw(aboutWin, 5, 1, "*****按任意键继续*****");
-        wrefresh(aboutWin);
+        mvaddstr(13, 58, "*此用户拒绝了你的请求*");
+        mvaddstr(14, 66, friend_name);
+        mvprintw(17, 58, "*****按任意键继续*****");
         getch();
 
     }
 
     delwin(aboutWin);
-   
-    touchwin(stdscr);                
-    wrefresh(stdscr);
 
 }

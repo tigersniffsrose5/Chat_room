@@ -1,6 +1,5 @@
 #include "client.h"
 
-int qsj = 1;            //登录菜单判断是否退出的标志
 int ActMm = 0;          //代表当前主菜单激活的号码
 int key = 0;            //用户从键盘输如的选择
 char *MainMenu[5] = { "********退出********", "********登录********", "********注册********", "******找回密码******", "********更多********" };     //登录菜单
@@ -17,7 +16,7 @@ int loginmenu()
     DrawMain();                                             //在屏幕上画出主菜单
     SelectmainMenu();                                       //对用户的操作进行相应的处理
     
-    return qsj;
+    return 0;
 }
 
 void Initial(void)
@@ -79,15 +78,14 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
 
             case 0:
                 QuitProg();
-                qsj = 0;
-                return qsj;
+                return 0;
 
             case 1:
                 if ( login() == 3 ) {
                     
                     my_mutex = 0;
 
-                    if (pthread_create(&thid, NULL, thread, NULL) != 0) {                                                                   
+                    if (pthread_create(&thid, NULL, Thread, NULL) != 0) {                                                                   
                         myerr("pthread_create", __LINE__);
                         exit(1);
                     }
@@ -122,7 +120,7 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
 
 void SelectMainMenu(void)
 {
-    mvaddstr(10+ActMm*4, 30+LeftCol, MainMenu[ActMm]); 
+    mvaddstr(10+ActMm*4, 30+LeftCol, MainMenu[ActMm]);
 
     if ( key == KEY_UP ) {
         ActMm = ActMm == 0 ? ActMm+4 : ActMm-1;
