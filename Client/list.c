@@ -75,13 +75,15 @@ void delet(Message_box **Head, const char *name)
 //}
 //
 //
-//void fre(Message_box *Head)
-//{
-//    Message_box *p = Head, *q;
-//
-//    while ( p ) {
-//        q = p;
-//        p = p->next;
-//        free(q);
-//    }
-//}
+void fre(Message_box **Head)
+{
+    Message_box *p = *Head, *q;
+
+    while ( p ) {
+        q = p;
+        p = p->next;
+        free(q);
+    }
+
+    *Head = NULL;
+}

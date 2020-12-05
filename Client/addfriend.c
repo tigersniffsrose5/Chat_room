@@ -16,6 +16,8 @@ void addfriend()
     touchwin(aboutWin);                
     wrefresh(aboutWin);
 
+    bSubOpen = 0;                        //没在主函数界面，切换标志位 
+
     echo();
     curs_set(1);
     keypad(stdscr, FALSE);

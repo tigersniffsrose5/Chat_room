@@ -44,7 +44,7 @@ extern int my_mutex;
 extern char *RegisteMenu[3];
 extern char user_name[30]; 
 extern int bSubOpen;                                //判断是否在功能界面
-extern int x;                                       //功能界面打印行
+extern int x;                                       //功能界面提示信息打印行
 extern Message_box *friend_request;
 extern Message_box *friend_chat;
 extern Message_box *group_chat;
@@ -70,6 +70,7 @@ void SelectfunctionMenurow();
 void SelectfunctionMenucol();
 void add(Message_box **Head, const char *message_t);        //单链表添加函数
 void delet(Message_box **Head, const char *name);           //单链表删除函数
+void fre(Message_box **Head);                               //单链表free函数
 void logout();                 //注销登录
 void addfriend();              //添加好友
 void add_friend(const char *message);     

@@ -24,7 +24,7 @@ void functionmenu()
 {
     char strArr[4][51];
 
-    bSubOpen = 1;
+    bSubOpen = 1;                  //功能主界面标志位
 
     Wind(stdscr, 3, 42, 34, 93);
 
@@ -49,6 +49,12 @@ void functionmenu()
     attroff(A_REVERSE);
 
     mvaddstr(15, 15+LeftCol, strArr[3]);
+    
+    x = 16;
+    if ( friend_request != NULL ) 
+        mvaddstr(x++, 15+LeftCol, "你有未处理的好友申请信息");
+
+
 }
 
 void SelectfunctionMenu()
@@ -95,6 +101,10 @@ void SelectfunctionMenu()
             case 6:
                 logout();
                 row = col = 0;
+                bSubOpen = 0;
+                fre(&friend_request);
+                fre(&friend_chat);
+                fre(&group_chat);
                 return;
 
             }

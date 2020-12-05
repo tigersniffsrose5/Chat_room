@@ -31,6 +31,11 @@ void Thread()
                 return;
             case 1:
                 add(&friend_request, message);
+                if ( bSubOpen == 1 ) {
+                    usleep(1000);
+                    mvprintw(x++, 15+LeftCol, "收到新的好友申请信息");
+                    refresh();
+                }
                 break;
         }
 
