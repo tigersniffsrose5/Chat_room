@@ -38,6 +38,11 @@ typedef struct Node{
     struct Node *next;
 }node;
 
+struct user{
+    char name[30];
+    char sta[10];
+};
+
 typedef struct Downline_message{
     char name[30];
     char message[MSG_LEN];
@@ -69,6 +74,7 @@ void delet1(node **Head, int fd_t);                                             
 int search(node *Head, const char *nam);                                                  //查询用户是否在线
 void logout(pack *recv);                                                                  //注销登录
 void addfriend(pack *recv);                                                               //添加好友
+void friendlist(pack *recv);                                                              //获取好友列表
 void add_downline_message(downline_message **Head, const char *nam, const char *buf);     
 void delet_downline_message(downline_message **Head, const char *nam);
 int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2);              //检查是否为好友 
