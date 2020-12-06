@@ -37,6 +37,12 @@ typedef struct message_box{
     struct message_box *next;
 }Message_box;
 
+typedef struct user{
+    char name[30];
+    char sta[10];
+    struct user *next;
+}User;
+
 
 extern int conn_fd;
 extern int ActSm;
@@ -46,7 +52,9 @@ extern char user_name[30];
 extern int bSubOpen;                                //判断是否在功能界面
 extern int x;                                       //功能界面提示信息打印行
 extern Message_box *friend_request;
+extern User *friend_list;
 extern Message_box *friend_chat;
+extern Message_box *group_list;
 extern Message_box *group_chat;
 
 
@@ -75,5 +83,8 @@ void logout();                 //注销登录
 void addfriend();              //添加好友
 void add_friend(const char *message);     
 void dealapply();
+void choosefriend();
+void friendlist();
+void friendlistrecv(const char *message);
 
 #endif

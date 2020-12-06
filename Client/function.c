@@ -82,6 +82,7 @@ void SelectfunctionMenu()
             switch ( ans ) { 
 
             case 1:
+                friendlist();    
                 break;
 
             case 2:

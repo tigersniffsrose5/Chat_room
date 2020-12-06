@@ -37,6 +37,11 @@ void Thread()
                     refresh();
                 }
                 break;
+            case 2:
+                friendlistrecv(message);
+                //printf("%s\n", cJSON_Print(root));
+                break;
+
         }
 
     }

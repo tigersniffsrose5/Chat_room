@@ -8,5 +8,7 @@ char user_name[30];
 int bSubOpen;
 int x;
 Message_box *friend_request;
+User *friend_list;
 Message_box *friend_chat;
+Message_box *group_list;
 Message_box *group_chat;
