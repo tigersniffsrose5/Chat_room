@@ -82,12 +82,11 @@ void SelectfunctionMenu()
             switch ( ans ) { 
 
             case 1:
-                friendlist();    
-                
                 mutex_t = 0;
-                
-                while ( mutex_t != 1 )
+                friendlist();    
+                while ( mutex_t != 1 )                      //等待从服务器获取数据
                     continue;
+                choosefriend();
                 break;
 
             case 2:

@@ -25,6 +25,7 @@
 
 #define PORT 1212
 #define ENTER '\r'
+#define ESC 27
 #define UpRow 0         //行起始
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
@@ -51,6 +52,8 @@ extern int mutex_t;                                 //等待列表界面操作�
 extern char *RegisteMenu[3];
 extern char user_name[30]; 
 extern int bSubOpen;                                //判断是否在功能界面
+extern int bSubOpen_friend;                         //判断是否在私聊界面
+extern int bSubOpen_group;                          //判断是否在群聊界面
 extern int x;                                       //功能界面提示信息打印行
 extern Message_box *friend_request;
 extern User *friend_list;
@@ -87,5 +90,6 @@ void dealapply();
 void choosefriend();
 void friendlist();
 void friendlistrecv(const char *message);
+void friendfunction();
 
 #endif

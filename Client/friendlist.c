@@ -67,5 +67,5 @@ void friendlistrecv(const char *message)
 
     }
 
-    choosefriend();
+    mutex_t = 1;
 }

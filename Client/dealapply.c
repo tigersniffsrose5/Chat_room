@@ -87,6 +87,8 @@ void dealapply()
 
     }
 
+    delwin(aboutWin);
+
     clear();
     functionmenu();
 

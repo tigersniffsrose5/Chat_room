@@ -68,7 +68,14 @@ void choosefriend()
         }
 
         else if ( key == ENTER ) {
-            break;    
+       
+            if ( l == i )
+                break;
+            
+            else {
+                friendfunction();
+            } 
+        
         }
     }
 //
@@ -90,6 +97,5 @@ void choosefriend()
     clear();
     functionmenu();
 
-    mutex_t = 1;
 }
 
