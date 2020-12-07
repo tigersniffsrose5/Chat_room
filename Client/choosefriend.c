@@ -90,5 +90,6 @@ void choosefriend()
     clear();
     functionmenu();
 
+    mutex_t = 1;
 }
 

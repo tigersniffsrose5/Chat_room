@@ -46,7 +46,8 @@ typedef struct user{
 
 extern int conn_fd;
 extern int ActSm;
-extern int my_mutex;
+extern int my_mutex;                                //登录界面等待工作线程退出
+extern int mutex_t;                                 //等待列表界面操作退出
 extern char *RegisteMenu[3];
 extern char user_name[30]; 
 extern int bSubOpen;                                //判断是否在功能界面

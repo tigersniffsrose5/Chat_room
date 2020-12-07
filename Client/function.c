@@ -83,6 +83,11 @@ void SelectfunctionMenu()
 
             case 1:
                 friendlist();    
+                
+                mutex_t = 0;
+                
+                while ( mutex_t != 1 )
+                    continue;
                 break;
 
             case 2:
