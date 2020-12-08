@@ -73,7 +73,8 @@ void choosefriend()
                 break;
             
             else {
-                friendfunction();
+                friendfunction(str_name[l]);
+                break;
             } 
         
         }

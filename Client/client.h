@@ -25,7 +25,6 @@
 
 #define PORT 1212
 #define ENTER '\r'
-#define ESC 27
 #define UpRow 0         //行起始
 #define DownRow 30      //行末尾
 #define LeftCol 28      //列起始
@@ -55,6 +54,8 @@ extern int bSubOpen;                                //判断是否在功能界�
 extern int bSubOpen_friend;                         //判断是否在私聊界面
 extern int bSubOpen_group;                          //判断是否在群聊界面
 extern int x;                                       //功能界面提示信息打印行
+extern int friend_x;                                //私聊界面信息打印行 
+extern int group_x;                                 //群聊界面信息打印行
 extern Message_box *friend_request;
 extern User *friend_list;
 extern Message_box *friend_chat;
@@ -86,10 +87,13 @@ void fre(Message_box **Head);                               //单链表free函�
 void logout();                 //注销登录
 void addfriend();              //添加好友
 void add_friend(const char *message);     
-void dealapply();
-void choosefriend();
-void friendlist();
-void friendlistrecv(const char *message);
-void friendfunction();
+void dealapply();              //处理好友申请 
+void choosefriend();           //选择好友
+void friendlist();             //获取好友列表
+void friendlistrecv(const char *message);                   
+void friendfunction(const char *friend_name);               //好友功能界面 
+void friendchat(const char *friend_name);                   //私聊
+void friendchat_menu(const char *friend_name);              //私聊界面
+int Strlen(const char *s);                                  //自己写的strlen，为了读汉字 
 
 #endif

@@ -20,7 +20,7 @@ void addfriend()
 
     echo();
     curs_set(1);
-    keypad(stdscr, FALSE);
+    keypad(stdscr, TRUE);
     
     mvprintw(13, 58, "*请输入待添加的好友名*");
     move(15,66);
@@ -41,7 +41,6 @@ void addfriend()
 
     noecho();
     curs_set(0);
-    keypad(stdscr, TRUE);
     
     mvprintw(17, 58,"*****按任意键继续*****");
     wrefresh(aboutWin);

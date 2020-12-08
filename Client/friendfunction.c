@@ -1,6 +1,6 @@
 #include "client.h"
 
-void friendfunction()
+void friendfunction(const char *friend_name)
 {
     WINDOW *aboutWin;
     int key, l;
@@ -52,7 +52,12 @@ void friendfunction()
 
         else if ( key == ENTER ) {
 
-            if ( l == 2 )
+            if ( l == 0 ) { 
+                friendchat(friend_name);
+                break;
+            }
+            
+            else if ( l == 2 )
                 break;
         }
     }
