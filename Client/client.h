@@ -72,28 +72,30 @@ void QuitProg(void);
 void Wind(WINDOW *, int, int, int, int);
 void Process(void);
 void myerr(const char * err_string, int line);              //自己写的错误提示函数
-void registe();                //注册
-int login();                   //登录
-void forgetpassword();         //找回密码
+void registe();                                             //注册
+int login();                                                //登录
+void forgetpassword();                                      //找回密码
 void Thread();
-void function();               
-void functionmenu();           //打印功能菜单
-void SelectfunctionMenu();     
+void function();                                            
+void functionmenu();                                        //打印功能菜单
+void SelectfunctionMenu();                                 
 void SelectfunctionMenurow();
 void SelectfunctionMenucol();
 void add(Message_box **Head, const char *message_t);        //单链表添加函数
 void delet(Message_box **Head, const char *name);           //单链表删除函数
 void fre(Message_box **Head);                               //单链表free函数
-void logout();                 //注销登录
-void addfriend();              //添加好友
+void fre1(User **Head);
+void logout();                                              //注销登录
+void addfriend();                                           //添加好友
 void add_friend(const char *message);     
-void dealapply();              //处理好友申请 
-void choosefriend();           //选择好友
-void friendlist();             //获取好友列表
+void dealapply();                                           //处理好友申请 
+void choosefriend();                                        //选择好友
+void friendlist();                                          //获取好友列表
 void friendlistrecv(const char *message);                   
 void friendfunction(const char *friend_name);               //好友功能界面 
 void friendchat(const char *friend_name);                   //私聊
 void friendchat_menu(const char *friend_name);              //私聊界面
-int Strlen(const char *s);                                  //自己写的strlen，为了读汉字 
+int Strlen(const char *s);                                  //自己写的strlen，为了读汉字,linux下汉字占3字节，但是打印出来占两个字符
+void friendchatrecv(const char *message);
 
 #endif

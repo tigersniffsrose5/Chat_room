@@ -51,9 +51,21 @@ void functionmenu()
     mvaddstr(15, 15+LeftCol, strArr[3]);
     
     x = 16;
-    if ( friend_request != NULL ) 
-        mvaddstr(x++, 15+LeftCol, "你有未处理的好友申请信息");
+    
+    if ( friend_request != NULL ) { 
+        mvaddstr(x, 15+LeftCol, "你有未处理的好友申请信息");
+        __sync_fetch_and_add(&x, 1);
+    }
+    
+    if ( friend_chat != NULL ) { 
+        mvaddstr(x, 15+LeftCol, "你有未处理的好友聊天信息");
+        __sync_fetch_and_add(&x, 1);
+    }
 
+    if ( group_chat != NULL ) { 
+        mvaddstr(x, 15+LeftCol, "你有未处理的群聊信息");
+        __sync_fetch_and_add(&x, 1);
+    }
 
 }
 

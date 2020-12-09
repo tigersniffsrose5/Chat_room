@@ -77,6 +77,7 @@ int SelectmainMenu(void)         //处理用户按键，调用相应的功能函
             switch ( ActMm ) { 
 
             case 0:
+                fre1(&friend_list);
                 QuitProg();
                 return 0;
 

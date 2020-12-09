@@ -7,12 +7,33 @@ void friendchat(const char *friend_name)
     char s1[100];
     char str[2][15] = {"确认发送", "退出私聊"};
     time_t timep;
+    cJSON *root;
+    cJSON *item;
+    Message_box *head = friend_chat;
 
     friendchat_menu(friend_name);
 
     bSubOpen = 0;                  //功能主界面标志位
     bSubOpen_friend = 1;
-    
+
+    while ( head != NULL ) {
+        
+        if ( strcmp(head->recv_name, friend_name) == 0 ) {
+            
+            friendchatrecv(head->message);
+            head = head->next;
+            delet(&friend_chat, friend_name);
+
+        }
+
+        else {
+
+            head = head->next;
+        
+        }
+
+    }
+
     while ( 1 ) {
 
         echo();
@@ -60,11 +81,32 @@ void friendchat(const char *friend_name)
                     }
 
                     mvaddstr(friend_x, 27+LeftCol, ctime(&timep));
-                    mvprintw(friend_x++, 92, "|");
+                    mvprintw(friend_x, 92, "|");
+                    __sync_fetch_and_add(&friend_x, 1);
                     bzero(s1, sizeof(s1));
-                    sprintf(s1, "%s:", user_name);
-                    mvaddstr(friend_x, 92-Strlen(s), s);
-                    mvaddstr(friend_x++, 92-Strlen(s1)-Strlen(s), s1);
+                    sprintf(s1, "%s:%s", user_name, s);
+                    mvaddstr(friend_x, 92-Strlen(s1), s1);
+                    __sync_fetch_and_add(&friend_x, 1);
+                    
+                    root = cJSON_CreateObject();
+                    item = cJSON_CreateNumber(6);
+                    cJSON_AddItemToObject(root, "type", item);
+                    item = cJSON_CreateString(user_name);
+                    cJSON_AddItemToObject(root,"user_name",item);
+                    item = cJSON_CreateString(friend_name);
+                    cJSON_AddItemToObject(root,"friend_name",item);
+                    item = cJSON_CreateString(ctime(&timep));
+                    cJSON_AddItemToObject(root,"time",item);
+                    item = cJSON_CreateString(s1);
+                    cJSON_AddItemToObject(root,"friend_chat_message",item);
+                    char *out = cJSON_Print(root);
+
+                    if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
+                        myerr("send", __LINE__);
+                    }
+
+                    cJSON_Delete(root);
+                    free(out);                
 
                     move(31, 43);
                     clrtoeol();
@@ -84,6 +126,48 @@ void friendchat(const char *friend_name)
     }
 
     bSubOpen_friend = 0;
+}
+
+void friendchatrecv(const char *message)
+{
+    char name1[30], name2[30], Time[30], chat_message[100];
+    cJSON *root, *item;
+
+    root = cJSON_Parse(message);
+    item = cJSON_GetObjectItem(root, "user_name");
+    strcpy(name1,item->valuestring);
+    item = cJSON_GetObjectItem(root, "friend_name");
+    strcpy(name2,item->valuestring);
+    item = cJSON_GetObjectItem(root, "time");
+    strcpy(Time,item->valuestring);
+    item = cJSON_GetObjectItem(root, "friend_chat_message");
+    strcpy(chat_message,item->valuestring);
+    cJSON_Delete(root);
+
+    if ( bSubOpen == 1 ) {
+        mvprintw(x, 15+LeftCol, "收到新的好友聊天信息");
+        __sync_fetch_and_add(&x, 1);
+        refresh();
+        add(&friend_chat, message);
+    }
+
+    else if ( bSubOpen_friend == 1 ) {
+        
+        if ( friend_x == 30 ) {
+            clear();
+            friendchat_menu(name2);
+        }
+
+        mvaddstr(friend_x, 27+LeftCol, Time);
+        mvprintw(friend_x, 92, "|");
+        __sync_fetch_and_add(&friend_x, 1);
+        mvaddstr(friend_x, 15+LeftCol, chat_message);
+        __sync_fetch_and_add(&friend_x, 1);
+        move(31, 43);
+        refresh();
+            
+    }
+
 }
 
 void friendchat_menu(const char *friend_name)

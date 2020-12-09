@@ -79,6 +79,7 @@ void dealapply()
         while ( head != NULL ) {
             if ( strcmp(head->recv_name, str_name[l]) == 0 ) {
                 add_friend(head->message);
+                break;
             }
             head = head->next;
         }

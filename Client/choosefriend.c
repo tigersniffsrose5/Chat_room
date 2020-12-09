@@ -4,10 +4,12 @@ void choosefriend()
 {
     WINDOW *aboutWin;
     int hang = 12;
-    int i, l, key;
+    int i, l, key, nums;
     char str_name[10][30];
     char str_sta[10][30];
+    char num[3];
     User *head = friend_list;
+    Message_box *p;
 
     clear();
     touchwin(stdscr);                    //激活stdrc窗口
@@ -30,7 +32,19 @@ void choosefriend()
         strcpy(str_name[i], head->name);
         strcpy(str_sta[i], head->sta);
         mvaddstr(hang, 61, str_name[i]);
-        mvaddstr(hang, 65, str_sta[i]);
+        mvaddstr(hang, 62+(strlen(head->name)-0), str_sta[i]);
+        
+        nums = 0;
+        p = friend_chat;
+
+        while ( p != NULL ) {
+            if ( strcmp(p->recv_name, head->name) == 0 )
+                nums++;
+            p = p->next;
+        }
+
+        sprintf(num, "%d", nums);
+        mvaddstr(hang, 63+(strlen(head->name)-0)+(strlen(head->sta)), num);
         hang += 2;
         i++;
         head = head->next; 
@@ -79,22 +93,7 @@ void choosefriend()
         
         }
     }
-//
-//    if ( l != i ) {
-//        
-//        head = friend_request;
-//
-//        while ( head != NULL ) {
-//            if ( strcmp(head->recv_name, str_name[l]) == 0 ) {
-//                add_friend(head->message);
-//            }
-//            head = head->next;
-//        }
-//
-//        delet(&friend_request, str_name[l]);
-//
-//    }
-//
+  
     clear();
     functionmenu();
 

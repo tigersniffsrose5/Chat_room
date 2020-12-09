@@ -33,15 +33,17 @@ void Thread()
                 add(&friend_request, message);
                 if ( bSubOpen == 1 ) {
                     usleep(1000);
-                    mvprintw(x++, 15+LeftCol, "收到新的好友申请信息");
+                    mvprintw(x, 15+LeftCol, "收到新的好友申请信息");
+                    __sync_fetch_and_add(&x, 1);
                     refresh();
                 }
                 break;
             case 2:
                 friendlistrecv(message);
-                //printf("%s\n", cJSON_Print(root));
                 break;
-
+            case 3:
+                friendchatrecv(message);
+                break;
         }
 
     }

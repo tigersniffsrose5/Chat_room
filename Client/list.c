@@ -87,3 +87,16 @@ void fre(Message_box **Head)
 
     *Head = NULL;
 }
+
+void fre1(User **Head)
+{
+    User *p = *Head, *q;
+
+    while ( p ) {
+        q = p;
+        p = p->next;
+        free(q);
+    }
+
+    *Head = NULL;
+}

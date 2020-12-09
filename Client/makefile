@@ -20,6 +20,6 @@ $(TARGET):$(ObjFile)
 	clean
 
 clean:
-	rm -rf *.o client
+	$(RM) $(ObjFile) client
 
 
