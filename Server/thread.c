@@ -11,7 +11,7 @@ void Thread(void *arg)
     choice =  item->valueint;
     cJSON_Delete(root);
 
-    void (* work[])(pack *) = { registe, login, forgetpassword, logout, addfriend, friendlist };
+    void (* work[])(pack *) = { registe, login, forgetpassword, logout, addfriend, friendlist, friend_chat };
     
     if ( choice >= 0 && choice < 15 ) {
         work[choice](p);

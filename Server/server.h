@@ -79,5 +79,6 @@ void add_downline_message(downline_message **Head, const char *nam, const char *
 void delet_downline_message(downline_message **Head, const char *nam);
 int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2);              //检查是否为好友 
 void Account_Perst_AddFriend(const char *name1, const char *name2);                       //添加好友关系到数据库
+void friend_chat(pack *recv);                                                             //私聊
 
 #endif

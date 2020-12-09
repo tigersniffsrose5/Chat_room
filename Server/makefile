@@ -20,6 +20,5 @@ $(TARGET):$(ObjFile)
 	clean
 
 clean:
-	rm -rf *.o server
-
+	$(RM) $(ObjFile) server
 
