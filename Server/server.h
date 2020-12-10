@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <linux/socket.h>
-#include<libgen.h>
+#include <libgen.h>
 #include <curses.h>
 #include <locale.h>
 #include "Common/cJSON.h"
@@ -80,5 +80,6 @@ void delet_downline_message(downline_message **Head, const char *nam);
 int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2);              //检查是否为好友 
 void Account_Perst_AddFriend(const char *name1, const char *name2);                       //添加好友关系到数据库
 void friend_chat(pack *recv);                                                             //私聊
+void friend_sendfile(pack *recv);                                                         //发文件
 
 #endif

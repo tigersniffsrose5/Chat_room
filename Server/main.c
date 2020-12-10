@@ -67,7 +67,7 @@ int main()
                 recv_len = 0;
 
                 while ( recv_len < MSG_LEN ) {
-                
+              
                     ret = 0;
                     ret = recv(events[i].data.fd,buf+recv_len,MSG_LEN-recv_len, MSG_WAITALL);
 
@@ -90,7 +90,6 @@ int main()
                         break;
                         
                     }
-
 
                     recv_len += ret;
 
