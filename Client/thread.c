@@ -13,7 +13,7 @@ void Thread()
 
             ret = 0;
 
-            if ( (ret = recv(conn_fd, message+recv_len, MSG_LEN-recv_len, 0)) <= 0 ) {
+            if ( (ret = recv(conn_fd, message+recv_len, MSG_LEN-recv_len, MSG_WAITALL)) <= 0 ) {
                 myerr("recv", __LINE__);
             }
 
@@ -43,6 +43,9 @@ void Thread()
                 break;
             case 3:
                 friendchatrecv(message);
+                break;
+            case 7:
+                friend_recvfile(message);
                 break;
         }
 

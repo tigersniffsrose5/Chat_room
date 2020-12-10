@@ -51,7 +51,15 @@ void functionmenu()
     mvaddstr(15, 15+LeftCol, strArr[3]);
     
     x = 16;
-    
+
+    if ( strlen(file_message) != 0 ) {
+        
+        mvaddstr(x, 15+LeftCol, "你有未处理的好友申请信息");
+        __sync_fetch_and_add(&x, 1);
+        memset(file_message, 0, sizeof(file_message));
+
+    }
+
     if ( friend_request != NULL ) { 
         mvaddstr(x, 15+LeftCol, "你有未处理的好友申请信息");
         __sync_fetch_and_add(&x, 1);

@@ -56,6 +56,7 @@ extern int bSubOpen_group;                          //判断是否在群聊界�
 extern int x;                                       //功能界面提示信息打印行
 extern int friend_x;                                //私聊界面信息打印行 
 extern int group_x;                                 //群聊界面信息打印行
+extern char file_message[100];
 extern Message_box *friend_request;
 extern User *friend_list;
 extern Message_box *friend_chat;
@@ -99,5 +100,6 @@ int Strlen(const char *s);                                  //自己写的strlen
 void friendchatrecv(const char *message);
 void friendsendfile(const char *friend_name);
 void friend_sendfile(const char *filename, const char *friend_name);
+void friend_recvfile(const char *message);
 
 #endif

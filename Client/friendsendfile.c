@@ -77,7 +77,7 @@ void friendsendfile(const char *friend_name)
 
 void friend_sendfile(const char *filename, const char *friend_name)
 {
-    char buf[650], code_out[900], code_end[5];
+    char buf[650], code_out[900], code_end[5];      //~4/3 x input
     char *out;
     int fd, size;
 
@@ -97,38 +97,36 @@ void friend_sendfile(const char *filename, const char *friend_name)
     while ( 1 ) {
     
         memset(buf ,0,sizeof(buf));
-        size = read(fd ,buf ,sizeof(buf)-2);    //减2为了凑24的倍数，因为base64编码每次读三个字节
+        size = read(fd, buf, sizeof(buf)-2);    //减2为了凑24的倍数，因为base64编码每次读三个字节
     
         base64_init_encodestate(&state_in);
         memset(code_out ,0,sizeof(code_out));
-        base64_encode_block(buf ,size ,code_out ,&state_in);
+        base64_encode_block(buf, size, code_out, &state_in);
 
-        if ( state_in.step != step_A ) {        //step_A代表刚好转成base64时不需要补位
+        if ( state_in.step != step_A ) {        //step_A代表刚好转成base64时不需要补位,将文件最后的字节加到末尾
             
             memset(code_end ,0,sizeof(code_end));
-            base64_encode_blockend(code_end ,&state_in);
-            strcat(code_out ,code_end);
+            base64_encode_blockend(code_end, &state_in);
+            strcat(code_out, code_end);
         
         }
 
         cJSON *root = cJSON_CreateObject();
-        cJSON *item = cJSON_CreateString("7");
-        cJSON_AddItemToObject(root ,"type" ,item);
+        cJSON *item = cJSON_CreateNumber(7);
+        cJSON_AddItemToObject(root, "type", item);
         item = cJSON_CreateString(friend_name);
-        cJSON_AddItemToObject(root ,"con",item);
+        cJSON_AddItemToObject(root, "friend_name", item);
         item = cJSON_CreateString(basename((char*)filename));
-        cJSON_AddItemToObject(root ,"filename" ,item);
+        cJSON_AddItemToObject(root, "filename", item);
         item = cJSON_CreateNumber(size);
-        cJSON_AddItemToObject(root ,"size" ,item);
+        cJSON_AddItemToObject(root, "size", item);
         item = cJSON_CreateString(code_out);
-        cJSON_AddItemToObject(root ,"con",item);
+        cJSON_AddItemToObject(root, "con", item);
         out = cJSON_Print(root);
         cJSON_Delete(root);
        
         if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {
             myerr("send", __LINE__);
-            free(out);
-            return;
         }
 
         if ( size < (int)sizeof(buf)-2 )
@@ -137,5 +135,46 @@ void friend_sendfile(const char *filename, const char *friend_name)
         free(out);
 
     }
+
     close(fd);
+
+}
+
+void friend_recvfile(const char *message)
+{
+    char code_out[650] ,buf[900];
+    char filename[100] = "Recvfile/";
+    int size;
+
+    base64_decodestate state_in;
+    
+    memset(buf, 0, sizeof(buf));
+    
+    cJSON *root = cJSON_Parse(message);
+    cJSON *item = cJSON_GetObjectItem(root, "filename");
+    strcat(filename, item->valuestring);
+    
+    int fd = open(filename, O_WRONLY|O_CREAT|O_APPEND, 0777);
+    
+    if ( fd == -1 ) {
+        myerr("open", __LINE__);
+    }
+
+    item = cJSON_GetObjectItem(root, "con");
+    strcat(buf, item->valuestring);
+    item = cJSON_GetObjectItem(root, "size");
+    size = item->valueint;
+    base64_init_decodestate(&state_in);
+    base64_decode_block(buf, strlen(buf), code_out, &state_in);
+    
+    if( write(fd, code_out, size) != size ) {
+        myerr("write", __LINE__);
+    }
+
+    if( size < 650-2 ) {
+        sprintf(file_message, "收到一个文件,已保存至./Recvfile/%s", basename(filename));
+    }
+
+    close(fd);
+
 }
