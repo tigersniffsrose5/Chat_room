@@ -57,6 +57,11 @@ void friendfunction(const char *friend_name)
                 break;
             }
             
+            else if ( l == 1 ) {
+                friendsendfile(friend_name);
+                break;
+            }
+
             else if ( l == 2 )
                 break;
         }

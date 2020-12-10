@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <linux/socket.h>
-#include<libgen.h>
+#include <libgen.h>
 #include <curses.h>
 #include <locale.h>
 #include "Common/cJSON.h"
@@ -97,5 +97,7 @@ void friendchat(const char *friend_name);                   //私聊
 void friendchat_menu(const char *friend_name);              //私聊界面
 int Strlen(const char *s);                                  //自己写的strlen，为了读汉字,linux下汉字占3字节，但是打印出来占两个字符
 void friendchatrecv(const char *message);
+void friendsendfile(const char *friend_name);
+void friend_sendfile(const char *filename, const char *friend_name);
 
 #endif
