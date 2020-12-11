@@ -13,6 +13,7 @@ int x;
 int friend_x;
 int group_x;
 char file_message[100];
+char friendchat_name[30];
 Message_box *friend_request;
 User *friend_list;
 Message_box *friend_chat;

@@ -11,6 +11,9 @@ void friendchat(const char *friend_name)
     cJSON *item;
     Message_box *head = friend_chat;
 
+    memset(friendchat_name, 0, sizeof(friendchat_name));
+    strcpy(friendchat_name, friend_name);
+
     friendchat_menu(friend_name);
 
     bSubOpen = 0;                  //功能主界面标志位
@@ -145,13 +148,15 @@ void friendchatrecv(const char *message)
     cJSON_Delete(root);
 
     if ( bSubOpen == 1 ) {
+        
         mvprintw(x, 15+LeftCol, "收到新的好友聊天信息");
         __sync_fetch_and_add(&x, 1);
         refresh();
         add(&friend_chat, message);
+    
     }
 
-    else if ( bSubOpen_friend == 1 ) {
+    else if ( bSubOpen_friend == 1 && strcmp(friendchat_name, name2) == 0 ) {
         
         if ( friend_x == 30 ) {
             clear();
@@ -166,6 +171,12 @@ void friendchatrecv(const char *message)
         move(31, 43);
         refresh();
             
+    }
+
+    else {
+
+        add(&friend_chat, message);
+
     }
 
 }

@@ -57,6 +57,7 @@ extern int x;                                       //功能界面提示信息�
 extern int friend_x;                                //私聊界面信息打印行 
 extern int group_x;                                 //群聊界面信息打印行
 extern char file_message[100];
+extern char friendchat_name[30];
 extern Message_box *friend_request;
 extern User *friend_list;
 extern Message_box *friend_chat;

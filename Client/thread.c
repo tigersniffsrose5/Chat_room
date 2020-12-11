@@ -13,7 +13,7 @@ void Thread()
 
             ret = 0;
 
-            if ( (ret = recv(conn_fd, message+recv_len, MSG_LEN-recv_len, MSG_WAITALL)) <= 0 ) {
+            if ( (ret = recv(conn_fd, message+recv_len, MSG_LEN-recv_len, 0)) <= 0 ) {
                 myerr("recv", __LINE__);
             }
 
