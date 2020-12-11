@@ -11,7 +11,8 @@ int main()
     pack *p;
 
     mysql_init_t();
-    
+    pthread_mutex_init(&lock, NULL);
+
     epfd = epoll_create(10000);
     sock_fd = socket(AF_INET, SOCK_STREAM, 0);
     
@@ -21,7 +22,7 @@ int main()
 
     optval = 1;
 
-    if ( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval, sizeof(int)) < 0 ) {
+    if ( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval, sizeof(int)) < 0 ) {  //设置端口释放后立即就可以被再次使用
         myerr("setsockopt", __LINE__);
     }
 
@@ -60,7 +61,7 @@ int main()
 
             }
 
-            else if ( events[i].events & EPOLLIN ) {
+            else if ( events[i].events & EPOLLIN ) {             //文件描述符可读（包括fd关闭）
                 
                 flag = 1;
                 bzero(&buf, sizeof(buf));
@@ -69,7 +70,7 @@ int main()
                 while ( recv_len < MSG_LEN ) {
               
                     ret = 0;
-                    ret = recv(events[i].data.fd,buf+recv_len,MSG_LEN-recv_len, MSG_WAITALL);
+                    ret = recv(events[i].data.fd,buf+recv_len,MSG_LEN-recv_len, 0);
 
                     if ( ret < 0 ) {
                         
@@ -112,5 +113,7 @@ int main()
     }
 
     mysql_close(mysql);
+    pthread_mutex_destroy(&lock);
+
     return 0;
 }
