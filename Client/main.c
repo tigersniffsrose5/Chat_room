@@ -2,7 +2,6 @@
 
 int main()
 {
-    pthread_t thid;
     struct sockaddr_in addr;
     
     conn_fd = socket(AF_INET, SOCK_STREAM, 0);

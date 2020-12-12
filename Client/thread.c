@@ -6,6 +6,7 @@ void Thread()
     char message[MSG_LEN];
     cJSON *root;
     cJSON *item;
+
     while ( 1 ) {
 
         recv_len = 0;

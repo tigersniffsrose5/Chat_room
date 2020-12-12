@@ -54,7 +54,7 @@ void functionmenu()
 
     if ( strlen(file_message) != 0 ) {
         
-        mvaddstr(x, 15+LeftCol, "你有未处理的好友申请信息");
+        mvaddstr(x, 15+LeftCol, file_message);
         __sync_fetch_and_add(&x, 1);
         memset(file_message, 0, sizeof(file_message));
 
