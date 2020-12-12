@@ -5,8 +5,6 @@ void friend_sendfile(pack *recv)
     int fd;
     cJSON *root, *item;
 
-    pthread_mutex_lock(&lock);
-
     root = cJSON_Parse(recv->json);
     item = cJSON_GetObjectItem(root, "friend_name");
 
@@ -19,8 +17,6 @@ void friend_sendfile(pack *recv)
         }
 
     }
-
-    pthread_mutex_unlock(&lock);
 
     cJSON_Delete(root);
 

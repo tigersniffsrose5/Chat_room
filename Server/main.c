@@ -11,7 +11,6 @@ int main()
     pack *p;
 
     mysql_init_t();
-    pthread_mutex_init(&lock, NULL);
 
     epfd = epoll_create(10000);
     sock_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -104,16 +103,19 @@ int main()
                 p->fd = events[i].data.fd;
                 memcpy(p->json, &buf, sizeof(buf));
 
-                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
-                    myerr("pthread_create", __LINE__); 
-                } 
+                Thread(p);
+
+//                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
+//                    myerr("pthread_create", __LINE__); 
+//                } 
+//
+//                pthread_join(thid, NULL);
 
             }
         }
     }
 
     mysql_close(mysql);
-    pthread_mutex_destroy(&lock);
 
     return 0;
 }
