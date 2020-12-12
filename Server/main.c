@@ -104,7 +104,6 @@ int main()
                 memcpy(p->json, &buf, sizeof(buf));
 
                 Thread(p);
-
 //                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
 //                    myerr("pthread_create", __LINE__); 
 //                } 
