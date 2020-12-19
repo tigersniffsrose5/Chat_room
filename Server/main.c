@@ -7,7 +7,7 @@ int main()
     struct sockaddr_in cli_addr, serv_addr;
     struct epoll_event ev, events[1000];
     char buf[MSG_LEN];
-    pthread_t thid;
+//    pthread_t thid;
     pack *p;
 
     mysql_init_t();
@@ -102,6 +102,7 @@ int main()
                 p = (pack *)malloc(sizeof(pack));
                 p->fd = events[i].data.fd;
                 memcpy(p->json, &buf, sizeof(buf));
+
 
                 Thread(p);
 //                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
