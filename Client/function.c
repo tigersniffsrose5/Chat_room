@@ -2,7 +2,7 @@
 
 char *Function_menu[2][3] = {
     "|选择好友|", "|选择群聊|", "|处理申请|",
-    "|添加好友|", "|创建群聊|", "|注销登录|"
+    "|添加好友|", "|群聊管理|", "|注销登录|"
 };
 int KEY = 0;
 int row = 0;     //行
@@ -121,6 +121,7 @@ void SelectfunctionMenu()
                 break;
             
             case 5:
+                group();
                 break;
             
             case 6:

@@ -102,5 +102,8 @@ void friendchatrecv(const char *message);
 void friendsendfile(const char *friend_name);
 void friend_sendfile(const char *filename, const char *friend_name);
 void friend_recvfile(const char *message);
+void creatgroup();
+void addgroup();
+void group();
 
 #endif
