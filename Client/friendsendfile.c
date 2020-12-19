@@ -79,7 +79,7 @@ void friend_sendfile(const char *filename, const char *friend_name)
 {
     char buf[650], code_out[900], code_end[5];      //~4/3 x input
     char *out;
-    int fd, size;
+    int fd, size, offset;
 
     base64_encodestate state_in;
 
@@ -94,18 +94,19 @@ void friend_sendfile(const char *filename, const char *friend_name)
         return;
     }
 
+    offset = 0;
     while ( 1 ) {
     
-        memset(buf ,0,sizeof(buf));
-        size = read(fd, buf, sizeof(buf)-2);    //减2为了凑24的倍数，因为base64编码每次读三个字节
+        memset(buf, 0, sizeof(buf));
+        size = pread(fd, buf, sizeof(buf)-2, offset);    //减2为了凑3的倍数，因为base64编码每次读三个字节
     
         base64_init_encodestate(&state_in);
-        memset(code_out ,0,sizeof(code_out));
+        memset(code_out, 0, sizeof(code_out));
         base64_encode_block(buf, size, code_out, &state_in);
 
         if ( state_in.step != step_A ) {        //step_A代表刚好转成base64时不需要补位,将文件最后的字节加到末尾
             
-            memset(code_end ,0,sizeof(code_end));
+            memset(code_end, 0, sizeof(code_end));
             base64_encode_blockend(code_end, &state_in);
             strcat(code_out, code_end);
         
@@ -120,6 +121,8 @@ void friend_sendfile(const char *filename, const char *friend_name)
         cJSON_AddItemToObject(root, "filename", item);
         item = cJSON_CreateNumber(size);
         cJSON_AddItemToObject(root, "size", item);
+        item = cJSON_CreateNumber(offset);
+        cJSON_AddItemToObject(root, "offset", item);
         item = cJSON_CreateString(code_out);
         cJSON_AddItemToObject(root, "con", item);
         out = cJSON_Print(root);
@@ -132,6 +135,7 @@ void friend_sendfile(const char *filename, const char *friend_name)
         if ( size < (int)sizeof(buf)-2 )
             break;
 
+        offset += size;
         free(out);
 
     }
@@ -144,7 +148,7 @@ void friend_recvfile(const char *message)
 {
     char code_out[650] ,buf[900];
     char filename[100] = "Recvfile/";
-    int size;
+    int size, offset;
 
     base64_decodestate state_in;
     
@@ -164,11 +168,13 @@ void friend_recvfile(const char *message)
     strcat(buf, item->valuestring);
     item = cJSON_GetObjectItem(root, "size");
     size = item->valueint;
+    item = cJSON_GetObjectItem(root, "offset");
+    offset = item->valueint;
     base64_init_decodestate(&state_in);
     base64_decode_block(buf, strlen(buf), code_out, &state_in);
     
-    if( write(fd, code_out, size) != size ) {
-        myerr("write", __LINE__);
+    if( pwrite(fd, code_out, size, offset) != size ) {
+        myerr("pwrite", __LINE__);
     }
 
     if( size < 650-2 ) {
