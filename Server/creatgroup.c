@@ -14,7 +14,7 @@ void creatgroup(pack *recv)
     item = cJSON_GetObjectItem(root, "group_name");
     strcpy(group_name,item->valuestring);
 
-    sprintf(SQL, "SELECT * FROM group_info WHERE (group_name = '%s')", group_name);
+    sprintf(SQL, "SELECT * FROM group_info WHERE group_name = '%s'", group_name);
 
     if( mysql_real_query(mysql , SQL ,strlen(SQL)) ) {
         printf("mysql_real_query select failure!\n"); 
@@ -25,12 +25,16 @@ void creatgroup(pack *recv)
     row = mysql_fetch_row(res);
 
     if ( row ) {
+        
+        mysql_free_result(res);
         return;
+    
     }
 
     else {
 
         memset(SQL, 0, sizeof(SQL));
+
         sprintf(SQL,"INSERT INTO group_info VALUES ('%s', '%s')", group_name, user_name);
 
         if( mysql_real_query(mysql , SQL , strlen(SQL)) ) {
@@ -41,5 +45,7 @@ void creatgroup(pack *recv)
         }
 
     }
+
+    mysql_free_result(res);
 
 }

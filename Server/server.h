@@ -80,6 +80,8 @@ int Account_Perst_MatchUser1AndUser2(const char *name1 , const char *name2);    
 void Account_Perst_AddFriend(const char *name1, const char *name2);                       //添加好友关系到数据库
 void friend_chat(pack *recv);                                                             //私聊
 void friend_sendfile(pack *recv);                                                         //发文件
-void creatgroup(pack *recv);
+void creatgroup(pack *recv);                                                              //创建群聊
+void addgroup(pack *recv);                                                                //加入群聊 
+void grouplist(pack *recv);                                                               //获取群列表
 
 #endif
