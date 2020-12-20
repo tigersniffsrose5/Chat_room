@@ -23,7 +23,8 @@ void group()
     attron(A_REVERSE);  
     mvaddstr(12, 58, str[0]);  
     attroff(A_REVERSE);
-
+    mvaddstr(16, 58, str[1]);  
+    
     l = 0;
     while ( 1 ) {
 
@@ -31,7 +32,7 @@ void group()
 
         if ( key == KEY_UP || key == KEY_DOWN ) {
 
-            mvaddstr(12+2*l, 61, str[l]);
+            mvaddstr(12+4*l, 58, str[l]);
 
             if ( key == KEY_UP ) {
                 l = l == 0 ? 1 : 0;

@@ -40,8 +40,6 @@ void addgroup()
     cJSON_AddItemToObject(root,"user_name",item);
     item = cJSON_CreateString(name);
     cJSON_AddItemToObject(root,"group_name",item);
-    item = cJSON_CreateNumber(1);
-    cJSON_AddItemToObject(root, "flag", item);
     char *out = cJSON_Print(root);
     
     if ( send(conn_fd, out, MSG_LEN, 0) < 0 ) {

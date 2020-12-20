@@ -110,6 +110,11 @@ void SelectfunctionMenu()
                 break;
 
             case 2:
+                mutex_t = 0;
+                grouplist();    
+                while ( mutex_t != 1 )                      //等待从服务器获取数据
+                    continue;
+                choosegroup();
                 break;
 
             case 3:

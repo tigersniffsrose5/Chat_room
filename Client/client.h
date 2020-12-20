@@ -49,20 +49,20 @@ extern int ActSm;
 extern int my_mutex;                                //登录界面等待工作线程退出
 extern int mutex_t;                                 //等待列表界面操作退出
 extern char *RegisteMenu[3];
-extern char user_name[30]; 
+extern char user_name[30];                          //目前客户端登录的用户名 
 extern int bSubOpen;                                //判断是否在功能界面
 extern int bSubOpen_friend;                         //判断是否在私聊界面
 extern int bSubOpen_group;                          //判断是否在群聊界面
 extern int x;                                       //功能界面提示信息打印行
 extern int friend_x;                                //私聊界面信息打印行 
 extern int group_x;                                 //群聊界面信息打印行
-extern char file_message[100];
-extern char friendchat_name[30];
-extern Message_box *friend_request;
-extern User *friend_list;
-extern Message_box *friend_chat;
-extern Message_box *group_list;
-extern Message_box *group_chat;
+extern char file_message[100];                      //收到文件的信息
+extern char friendchat_name[30];                    //正在聊天的好友名字
+extern Message_box *friend_request;                 //好友申请处理列表
+extern User *friend_list;                           //好友列表
+extern Message_box *friend_chat;                    //不在聊天界面时，保存好友发来的信息列表
+extern char group_list[20][20];                     //群列表
+extern Message_box *group_chat;                     //不在群聊接面时，保存群消息列表
 
 
 int loginmenu();               //登录界面主函数
