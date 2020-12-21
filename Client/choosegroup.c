@@ -82,7 +82,7 @@ void choosegroup()
                 break;
             
             else {
-//                groupchat(group_list[l]);
+                groupchat(group_list[l]);
                 break;
             } 
         

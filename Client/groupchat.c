@@ -92,12 +92,12 @@ void groupchat(const char *group_name)
                     __sync_fetch_and_add(&group_x, 1);
                     
                     root = cJSON_CreateObject();
-                    item = cJSON_CreateNumber(10);
+                    item = cJSON_CreateNumber(11);
                     cJSON_AddItemToObject(root, "type", item);
                     item = cJSON_CreateString(user_name);
                     cJSON_AddItemToObject(root,"user_name",item);
                     item = cJSON_CreateString(group_name);
-                    cJSON_AddItemToObject(root,"group_name",item);
+                    cJSON_AddItemToObject(root,"friend_name",item);             
                     item = cJSON_CreateString(ctime(&timep));
                     cJSON_AddItemToObject(root,"time",item);
                     item = cJSON_CreateString(s1);
@@ -139,7 +139,7 @@ void groupchatrecv(const char *message)
     root = cJSON_Parse(message);
     item = cJSON_GetObjectItem(root, "user_name");
     strcpy(name1,item->valuestring);
-    item = cJSON_GetObjectItem(root, "group_name");
+    item = cJSON_GetObjectItem(root, "friend_name");
     strcpy(name2,item->valuestring);
     item = cJSON_GetObjectItem(root, "time");
     strcpy(Time,item->valuestring);
