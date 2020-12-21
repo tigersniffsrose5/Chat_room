@@ -5,6 +5,7 @@ void login(pack *recv)
     char name[30], password[30];
     int uid;
     cJSON *root, *item;
+    downline_message *p = downline_message_t;
 
     root = cJSON_Parse(recv->json);
     item = cJSON_GetObjectItem(root , "name");
@@ -76,9 +77,25 @@ void login(pack *recv)
     if( send(recv->fd , out, MSG_LEN, 0) < 0 ) {
         myerr("send", __LINE__);
     }
-
+    
     cJSON_Delete(root);
     free(out);
+
+    while ( p ) {
+
+        if ( strcmp(p->name, name) == 0 ) {
+           
+            if( send(recv->fd , p->message, MSG_LEN, 0) < 0 ) {
+                myerr("send", __LINE__);
+            }
+            
+        }
+
+        p = p->next;
+
+    }
+
+    delet_downline_message(&downline_message_t, name);
 
 }
 

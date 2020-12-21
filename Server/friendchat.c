@@ -38,11 +38,11 @@ void friend_chat(pack *recv)
             myerr("send", __LINE__);
         }
     }
-//
-//    else {
-//        add_downline_message(&downline_message_t, name2, out); 
-//    }
-//
+
+    else {
+        add_downline_message(&downline_message_t, name2, out); 
+    }
+
     cJSON_Delete(root);
     free(out);
 

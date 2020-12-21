@@ -12,9 +12,9 @@ void Thread(void *arg)
     cJSON_Delete(root);
 
     void (* work[])(pack *) = { registe, login, forgetpassword, logout, addfriend, friendlist, friend_chat, friend_sendfile,
-        creatgroup, addgroup, grouplist};
+        creatgroup, addgroup, grouplist, group_chat};
     
-    if ( choice >= 0 && choice < 15 ) {
+    if ( choice >= 0 && choice < 12 ) {
         work[choice](p);
     }
 

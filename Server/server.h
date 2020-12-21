@@ -83,5 +83,6 @@ void friend_sendfile(pack *recv);                                               
 void creatgroup(pack *recv);                                                              //创建群聊
 void addgroup(pack *recv);                                                                //加入群聊 
 void grouplist(pack *recv);                                                               //获取群列表
+void group_chat(pack *recv);                                                              //群聊
 
 #endif
