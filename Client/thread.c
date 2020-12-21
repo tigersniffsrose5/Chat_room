@@ -48,6 +48,9 @@ void Thread()
             case 4:
                 grouplistrecv(message);
                 break;
+            case 5:
+                groupchatrecv(message);
+                break;
             case 7:
                 friend_recvfile(message);
                 break;

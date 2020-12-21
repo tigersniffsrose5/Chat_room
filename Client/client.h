@@ -58,6 +58,7 @@ extern int friend_x;                                //私聊界面信息打印�
 extern int group_x;                                 //群聊界面信息打印行
 extern char file_message[100];                      //收到文件的信息
 extern char friendchat_name[30];                    //正在聊天的好友名字
+extern char groupchat_name[30];                     //正在聊天的群聊名字
 extern Message_box *friend_request;                 //好友申请处理列表
 extern User *friend_list;                           //好友列表
 extern Message_box *friend_chat;                    //不在聊天界面时，保存好友发来的信息列表
@@ -99,11 +100,16 @@ void friendchat(const char *friend_name);                   //私聊
 void friendchat_menu(const char *friend_name);              //私聊界面
 int Strlen(const char *s);                                  //自己写的strlen，为了读汉字,linux下汉字占3字节，但是打印出来占两个字符
 void friendchatrecv(const char *message);
-void friendsendfile(const char *friend_name);
+void friendsendfile(const char *friend_name);               //发文件
 void friend_sendfile(const char *filename, const char *friend_name);
 void friend_recvfile(const char *message);
-void creatgroup();
-void addgroup();
+void creatgroup();                                          //创建群聊
+void addgroup();                                            //加入群聊
 void group();
-
+void grouplist();                                           //获取群聊列表
+void grouplistrecv(const char *message);
+void choosegroup();                                         //选择群聊
+void groupchat_menu(const char *group_name);                //群聊界面
+void groupchat(const char *group_name);                     //群聊
+void groupchatrecv(const char *message);
 #endif

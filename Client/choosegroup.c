@@ -1,14 +1,11 @@
 #include "client.h"
 
-void choosefriend()
+void choosegroup()
 {
     WINDOW *aboutWin;
     int hang = 12;
     int i, l, key, nums;
-    char str_name[10][30];
-    char str_sta[10][30];
     char num[3];
-    User *head = friend_list;
     Message_box *p;
 
     clear();
@@ -25,36 +22,34 @@ void choosefriend()
 
     bSubOpen = 0;                        //没在主函数界面，切换标志位 
 
-    mvaddstr(10, 58, "******好友列表******");
+    mvaddstr(10, 58, "******群聊列表******");
 
     i = 0;
-    while ( head != NULL ) {
-        strcpy(str_name[i], head->name);
-        strcpy(str_sta[i], head->sta);
-        mvaddstr(hang, 61, str_name[i]);
-        mvaddstr(hang, 62+(strlen(head->name)-0), str_sta[i]);
+    while ( strcmp(group_list[i], "") != 0 ) {
+        
+        mvaddstr(hang, 64, group_list[i]);
         
         nums = 0;
-        p = friend_chat;
+        p = group_chat;
 
         while ( p != NULL ) {
-            if ( strcmp(p->recv_name, head->name) == 0 )
+            if ( strcmp(p->recv_name, group_list[i]) == 0 )
                 nums++;
             p = p->next;
         }
 
         sprintf(num, "%d", nums);
-        mvaddstr(hang, 63+(strlen(head->name)-0)+(strlen(head->sta)), num);
+        mvaddstr(hang, 66+(strlen(group_list[i])-0), num);
         hang += 2;
         i++;
-        head = head->next; 
+    
     }
 
-    strcpy(str_name[i], "*****返回*****");
-    mvaddstr(hang, 61, str_name[i]);
+    strcpy(group_list[i], "**返回**");
+    mvaddstr(hang, 64, group_list[i]);
     
     attron(A_REVERSE);  
-    mvaddstr(12, 61, str_name[0]);  
+    mvaddstr(12, 64, group_list[0]);  
     attroff(A_REVERSE);
 
     l = 0;
@@ -65,7 +60,7 @@ void choosefriend()
 
         if ( key == KEY_UP || key == KEY_DOWN ) {
 
-            mvaddstr(12+2*l, 61, str_name[l]);
+            mvaddstr(12+2*l, 64, group_list[l]);
             
             if ( key == KEY_UP ) {
                 l = l == 0 ? i : l-1; 
@@ -76,7 +71,7 @@ void choosefriend()
             }
 
             attron(A_REVERSE);  
-            mvaddstr(12+2*l, 61, str_name[l]);  
+            mvaddstr(12+2*l, 64, group_list[l]);  
             attroff(A_REVERSE);
 
         }
@@ -87,7 +82,7 @@ void choosefriend()
                 break;
             
             else {
-                friendfunction(str_name[l]);
+//                groupchat(group_list[l]);
                 break;
             } 
         
