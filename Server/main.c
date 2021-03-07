@@ -46,7 +46,7 @@ int main()
     
     while ( 1 ) {
 
-        nfds = epoll_wait(epfd,events,10000,1000);
+        nfds = epoll_wait(epfd, events, 10000, -1);
         
         for ( i = 0; i < nfds; i++ ) {
             
