@@ -108,8 +108,8 @@ int main()
 //                if ( pthread_create(&thid, NULL, Thread, (void *)p) != 0 ) { 
 //                    myerr("pthread_create", __LINE__); 
 //                } 
-
-                pthread_join(thid, NULL);
+//
+//                pthread_join(thid, NULL);
 
             }
         }
